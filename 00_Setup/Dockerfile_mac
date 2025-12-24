@@ -13,6 +13,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     git \
     tini \
+    texlive-latex-base \
+    texlive-latex-recommended \
+    texlive-latex-extra \
+    texlive-fonts-recommended \
+    texlive-xetex \
+    latexmk \    
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # ------------------------------------------------------------
