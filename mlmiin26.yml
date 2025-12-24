@@ -43,7 +43,6 @@ dependencies:
 
   - pip:
       # Wrappers / exporters
-      - scikeras
       - sklearn2pmml
 
       # Nixtlaverse (added even if not used in notebooks)
@@ -56,6 +55,3 @@ dependencies:
       # Datasets
       - rdatasets
 
-      # Standalone keras (OPTIONAL — remove if not needed)
-      # Needed only for notebooks that import `import keras` directly
-      - keras
