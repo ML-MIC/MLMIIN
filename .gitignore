@@ -10,7 +10,8 @@ data
 .DS_Store
 *.DS_Store
 
-
+*.pkl
+*.pyc
 
 # History files
 .Rhistory
