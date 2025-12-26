@@ -25,10 +25,9 @@ Last updated: `r Sys.Date()`
 
 # Links  
 
-+ This page is at: [https://ml-mic.github.io/MLMIIN_public](https://ml-mic.github.io/MLMIIN_public)
++ This page is at: [https://ml-mic.github.io/MLMIIN/](https://ml-mic.github.io/MLMIIN). **Bookmark it now!**
 
-**Bookmark it now!**
-
++ [Course GiHub repository]() 
 
 
 
