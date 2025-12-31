@@ -110,10 +110,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#configure-github-desktop" id="toc-configure-github-desktop" class="nav-link" data-scroll-target="#configure-github-desktop">3.4.1 Configure GitHub Desktop</a></li>
   </ul></li>
   <li><a href="#using-git-in-vs-code" id="toc-using-git-in-vs-code" class="nav-link" data-scroll-target="#using-git-in-vs-code">3.5. Using git in VS Code</a></li>
+  </ul></li>
   <li><a href="#get-the-course-files" id="toc-get-the-course-files" class="nav-link" data-scroll-target="#get-the-course-files">4. Get the Course Files</a>
   <ul class="collapse">
   <li><a href="#fork-the-course-repository" id="toc-fork-the-course-repository" class="nav-link" data-scroll-target="#fork-the-course-repository">4.1 Fork the course repository</a></li>
-  <li><a href="#clone-your-fork-to-your-computer" id="toc-clone-your-fork-to-your-computer" class="nav-link" data-scroll-target="#clone-your-fork-to-your-computer">4.2 Clone your fork to your computer</a></li>
+  <li><a href="#clone-your-fork-to-your-computer" id="toc-clone-your-fork-to-your-computer" class="nav-link" data-scroll-target="#clone-your-fork-to-your-computer">4.2 Clone your fork to your computer</a>
+  <ul class="collapse">
+  <li><a href="#using-github-desktop" id="toc-using-github-desktop" class="nav-link" data-scroll-target="#using-github-desktop">4.2.1 Using GitHub Desktop</a></li>
+  <li><a href="#using-vs-code" id="toc-using-vs-code" class="nav-link" data-scroll-target="#using-vs-code">4.2.2 Using VS Code</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#build-the-course-docker-image" id="toc-build-the-course-docker-image" class="nav-link" data-scroll-target="#build-the-course-docker-image">5. Build the Course Docker Image</a>
   <ul class="collapse">
@@ -123,14 +128,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#run-the-docker-container" id="toc-run-the-docker-container" class="nav-link" data-scroll-target="#run-the-docker-container">6. Run the Docker Container</a>
   <ul class="collapse">
   <li><a href="#command-to-run-the-container" id="toc-command-to-run-the-container" class="nav-link" data-scroll-target="#command-to-run-the-container">6.1. Command to run the container</a></li>
-  <li><a href="#what-you-should-see" id="toc-what-you-should-see" class="nav-link" data-scroll-target="#what-you-should-see">6.3. What you should see</a></li>
   </ul></li>
   <li><a href="#connect-from-vs-code-to-the-jupyter-kernel-in-docker" id="toc-connect-from-vs-code-to-the-jupyter-kernel-in-docker" class="nav-link" data-scroll-target="#connect-from-vs-code-to-the-jupyter-kernel-in-docker">7. Connect from VS Code to the Jupyter Kernel in Docker</a>
   <ul class="collapse">
   <li><a href="#open-the-course-folder-in-vs-code" id="toc-open-the-course-folder-in-vs-code" class="nav-link" data-scroll-target="#open-the-course-folder-in-vs-code">7.1. Open the course folder in VS Code</a></li>
   <li><a href="#open-a-notebook" id="toc-open-a-notebook" class="nav-link" data-scroll-target="#open-a-notebook">7.2. Open a notebook</a></li>
   <li><a href="#select-the-jupyter-server" id="toc-select-the-jupyter-server" class="nav-link" data-scroll-target="#select-the-jupyter-server">7.3. Select the Jupyter server</a></li>
-  </ul></li>
   </ul></li>
   <li><a href="#typical-workflow-for-each-session" id="toc-typical-workflow-for-each-session" class="nav-link" data-scroll-target="#typical-workflow-for-each-session">8. Typical Workflow for Each Session</a>
   <ul class="collapse">
@@ -370,41 +373,55 @@ https://www.docker.com/products/docker-desktop/</li>
 <p>VS Code has built-in support for git that is very convenient if you already have some experience with git. You can access it by clicking on the <strong>Source Control</strong> icon in the left sidebar (it looks like a branch with a dot). From there, you can clone repositories, commit changes, push to remote repositories, and more.</p>
 <p>The first time you use git in VS Code, it may ask you to login to your GitHub account. Follow the instructions to authenticate.</p>
 </section>
-<section id="get-the-course-files" class="level2">
-<h2 class="anchored" data-anchor-id="get-the-course-files">4. Get the Course Files</h2>
-<section id="fork-the-course-repository" class="level3">
-<h3 class="anchored" data-anchor-id="fork-the-course-repository">4.1 Fork the course repository</h3>
+</section>
+<section id="get-the-course-files" class="level1">
+<h1>4. Get the Course Files</h1>
+<section id="fork-the-course-repository" class="level2">
+<h2 class="anchored" data-anchor-id="fork-the-course-repository">4.1 Fork the course repository</h2>
 <p>Login to GitHub on your web browser. Go to <a href="https://github.com/ML-MIC/MLMIIN">https://github.com/ML-MIC/MLMIIN</a> and click on the fork icon (top-right) to create your own copy of the repository.</p>
 <p><img src="./fig/GitHubForkMLMIIN.png" width="90%/"></p>
 <p>We strongly suggest using <code>MLMIINfrk</code> as the name of your fork, so that it is easy to identify. Wait until the fork is completed and the web page for the forked repository is shown.</p>
 </section>
-<section id="clone-your-fork-to-your-computer" class="level3">
-<h3 class="anchored" data-anchor-id="clone-your-fork-to-your-computer">4.2 Clone your fork to your computer</h3>
+<section id="clone-your-fork-to-your-computer" class="level2">
+<h2 class="anchored" data-anchor-id="clone-your-fork-to-your-computer">4.2 Clone your fork to your computer</h2>
 <p>This step depends on the tool you are using: <strong>GitHub Desktop</strong>, <strong>VS Code</strong>, or <strong>git command line</strong>. In either case you will start by clicking the green <strong>Code</strong> button on your forked repository page, and copying the URL shown (make sure <strong>HTTPS</strong> is selected) as in the picture below:</p>
 <p><img src="./fig/GitHubCloneFork01.png" width="90%/"></p>
-<section id="using-github-desktop" class="level4">
-<h4 class="anchored" data-anchor-id="using-github-desktop">4.2.1 Using GitHub Desktop</h4>
+<section id="using-github-desktop" class="level3">
+<h3 class="anchored" data-anchor-id="using-github-desktop">4.2.1 Using GitHub Desktop</h3>
 <p>Open <em>GitHub Desktop</em> and go to <em>File → Clone Repository…</em>. See the figure for the window that opens:</p>
 <p><img src="./fig/GitHubCloneFork02.png" width="70%" align="center"></p>
 <p>Make sure GitHub is selected and enter the name of the fork you created before (that is <em>MLMIINfrk</em> if you followed our advice). <strong>Choose your course root</strong> as local path where to clone the repository (this will be your folder). Finally click on <strong>Clone</strong>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>In the next step make sure that you select <em>To contribute to the parent project</em> as illustrated below:</p>
+</div>
+</div>
 <p><img src="./fig/GitHubCloneFork03.png" width="70%/"></p>
 </section>
-<section id="using-vs-code" class="level4">
-<h4 class="anchored" data-anchor-id="using-vs-code">4.2.2 Using VS Code</h4>
+<section id="using-vs-code" class="level3">
+<h3 class="anchored" data-anchor-id="using-vs-code">4.2.2 Using VS Code</h3>
 <p>Open <em>VS Code</em>. Press <code>Ctrl+Shift+P</code> (Windows) or <code>Cmd+Shift+P</code> (macOS) to open the command palette. Type <code>Git: Clone</code> and select it.</p>
 <p><img src="./fig/GitHubCloneFork04.png" width="90%/"></p>
-<p>Next, paste the URL you copied before and press Enter.</p>
+<p>Next, paste <strong>the URL of the forked repo</strong> you copied before and press Enter.</p>
+<p><strong>Make sure that you use the forked repo and not the original one!</strong> The URL should contain your GitHub username.</p>
 <p><img src="./fig/GitHubCloneFork05.png" width="90%/"></p>
 <p>When prompted, <strong>choose your course root</strong> as the local <em>repository destination</em> (the repository will be clones as a subfolder of your course root folder). Wait until the cloning is completed. You can then open the folder in VS Code (and answer Yes about trusting the authors).</p>
 </section>
 </section>
 </section>
-<section id="build-the-course-docker-image" class="level2">
-<h2 class="anchored" data-anchor-id="build-the-course-docker-image">5. Build the Course Docker Image</h2>
+<section id="build-the-course-docker-image" class="level1">
+<h1>5. Build the Course Docker Image</h1>
 <p>Depending on your OS and hardware architecture, this can be a long process (expect up to 20–40 minutes). But you only need to <strong>build the image once</strong> (unless the course Dockerfile changes).</p>
-<section id="macos" class="level3">
-<h3 class="anchored" data-anchor-id="macos">5.1. MacOS</h3>
+<section id="macos" class="level2">
+<h2 class="anchored" data-anchor-id="macos">5.1. MacOS</h2>
 <ol type="1">
 <li>Open <em>Terminal</em>.</li>
 <li>Use <code>cd</code> to navigate to the subfolder in your forked repository folder that contains the Dockerfile for the image; a typical example is:</li>
@@ -419,24 +436,24 @@ https://www.docker.com/products/docker-desktop/</li>
 <div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You should see something like <code>mlmiin   latest</code> in the list.</p>
 </section>
-<section id="windows" class="level3">
-<h3 class="anchored" data-anchor-id="windows">5.2. Windows</h3>
+<section id="windows" class="level2">
+<h2 class="anchored" data-anchor-id="windows">5.2. Windows</h2>
 <ol type="1">
-<li>Open <strong>PowerShell</strong>.</li>
+<li>Open <em>PowerShell</em>.</li>
 <li>Use <code>cd</code> to navigate to the subfolder in your forked repository folder that contains the Dockerfile for the image; a typical example is:</li>
 </ol>
-<div class="sourceCode" id="cb16"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cd</span> C<span class="op">:</span>\Users\<span class="op">&lt;</span>yourname<span class="op">&gt;</span>\MIIN\ML\MLMIINfrk\00_Setup</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> C:<span class="dt">\U</span>sers<span class="dt">\&lt;</span>yourname<span class="op">&gt;</span><span class="dt">\M</span>IIN\ML\MLMIINfrk\00_Setup</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="3" type="1">
 <li>Build the image:</li>
 </ol>
-<div class="sourceCode" id="cb17"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>docker image build <span class="op">--</span>file Dockerfile_x86 <span class="op">--</span>tag mlmiin<span class="op">:</span>latest <span class="op">.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image build <span class="at">--file</span> Dockerfile_x86 <span class="at">--tag</span> mlmiin:latest .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Check it with:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>docker images</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You should see <code>mlmiin</code> listed.</p>
 </section>
 </section>
-<section id="run-the-docker-container" class="level2">
-<h2 class="anchored" data-anchor-id="run-the-docker-container">6. Run the Docker Container</h2>
+<section id="run-the-docker-container" class="level1">
+<h1>6. Run the Docker Container</h1>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -451,13 +468,10 @@ Choose the right folder to run the container from
 <p>Additionally, this keeps the container isolated from other folders on your computer, which is a good security practice.</p>
 </div>
 </div>
-<section id="command-to-run-the-container" class="level3">
-<h3 class="anchored" data-anchor-id="command-to-run-the-container">6.1. Command to run the container</h3>
+<section id="command-to-run-the-container" class="level2">
+<h2 class="anchored" data-anchor-id="command-to-run-the-container">6.1. Command to run the container</h2>
 <p>In <em>Terminal</em> for MacOS o or <em>PowerShell</em> for Windows, and <strong>from your course root folder</strong>, run the following command to start the container and the Jupyter kernel inside it.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> <span class="at">--rm</span> <span class="at">-p</span> 8888:8888  <span class="at">-v</span> <span class="st">"</span><span class="va">$PWD</span><span class="st">"</span>:/wd mlmiin:latest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="what-you-should-see" class="level3">
-<h3 class="anchored" data-anchor-id="what-you-should-see">6.3. What you should see</h3>
 <p>In the terminal, you should see Jupyter starting and eventually a line like:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8888/lab</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In our course image, Jupyter is configured without a token (password), so the URL we need is simply</p>
@@ -477,10 +491,10 @@ Keep terminal open
 </div>
 </section>
 </section>
-<section id="connect-from-vs-code-to-the-jupyter-kernel-in-docker" class="level2">
-<h2 class="anchored" data-anchor-id="connect-from-vs-code-to-the-jupyter-kernel-in-docker">7. Connect from VS Code to the Jupyter Kernel in Docker</h2>
-<section id="open-the-course-folder-in-vs-code" class="level3">
-<h3 class="anchored" data-anchor-id="open-the-course-folder-in-vs-code">7.1. Open the course folder in VS Code</h3>
+<section id="connect-from-vs-code-to-the-jupyter-kernel-in-docker" class="level1">
+<h1>7. Connect from VS Code to the Jupyter Kernel in Docker</h1>
+<section id="open-the-course-folder-in-vs-code" class="level2">
+<h2 class="anchored" data-anchor-id="open-the-course-folder-in-vs-code">7.1. Open the course folder in VS Code</h2>
 <p>If you have followed the steps above, you may have already opened the course folder in VS Code (you can check it by looking at the top of the VS Code window; it should show the folder name, such as <code>MLMIINfrk</code>). In that case skip to the next section.</p>
 <p>If not, do the following:</p>
 <ol type="1">
@@ -490,13 +504,13 @@ Keep terminal open
 <li>VS Code might ask if you trust the folder → click <em>Yes, I trust the authors</em>.</li>
 </ol>
 </section>
-<section id="open-a-notebook" class="level3">
-<h3 class="anchored" data-anchor-id="open-a-notebook">7.2. Open a notebook</h3>
+<section id="open-a-notebook" class="level2">
+<h2 class="anchored" data-anchor-id="open-a-notebook">7.2. Open a notebook</h2>
 <p>In the VS Code <em>Explorer</em> panel (the first icon on the left side bar). Navigate to <code>00_Setup</code> and open the <code>1_1_Introduction.ipynb</code> notebook file (click it). The file may look different in your computer, because of the extensions you have installed, but it should be similar to this:</p>
 <p><img src="./fig/Notebook_1_1_Introduction.png" width="70%/"></p>
 </section>
-<section id="select-the-jupyter-server" class="level3">
-<h3 class="anchored" data-anchor-id="select-the-jupyter-server">7.3. Select the Jupyter server</h3>
+<section id="select-the-jupyter-server" class="level2">
+<h2 class="anchored" data-anchor-id="select-the-jupyter-server">7.3. Select the Jupyter server</h2>
 <p>At the top-right corner of the notebook editor panel, you should see a <strong>Select Kernel</strong> button:</p>
 <p><img src="./fig/VSCode_SelectKernel_01.png" width="90%/"></p>
 <p>Click on it, and then click on <strong>Existing Jupyter server</strong>:</p>
@@ -507,7 +521,6 @@ Keep terminal open
 Finally click on the Python 3 (ipykernel) option to select the kernel.</p>
 <p><img src="./fig/VSCode_SelectKernel_04.png" width="90%/"></p>
 <p>Now you are ready to start executing Python cells in the notebook. Search for the section with title <em>Python Setup Checks</em> in the notebook and run the cells there to verify that everything is working correctly. Let your instructor know if you encounter any issues.</p>
-</section>
 </section>
 </section>
 <section id="typical-workflow-for-each-session" class="level1">
@@ -531,7 +544,22 @@ Finally click on the Python 3 (ipykernel) option to select the kernel.</p>
 </section>
 <section id="update-course-files" class="level2">
 <h2 class="anchored" data-anchor-id="update-course-files">8.2 Update course files</h2>
-<p><strong>IMPORTANT:</strong> Make a <code>git pull</code> from the <code>upstream</code> repository to get the latest course files. In your case the upstream repository is the original course repository at <a href="https://github.com/ML-MIC/MLMIIN.git">https://github.com/ML-MIC/MLMIIN.git</a>. When we update the course files (e.g.&nbsp;new notebooks, fixes, etc.) we will push them to that repository, and you will need to pull them into your fork before starting the session. The way to do that depends on how you plan to manage git:</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Always update your fork before starting the session
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Make a <code>git pull</code> from the <code>upstream</code> repository to get the latest course files. Instructions follow.</p>
+</div>
+</div>
+<p>In your case the upstream repository is the original course repository at</p>
+<p><a href="https://github.com/ML-MIC/MLMIIN.git">https://github.com/ML-MIC/MLMIIN.git</a></p>
+<p>When we update the course files (e.g.&nbsp;new notebooks, fixes, etc.) we will push them to that repository, and you will need to pull them into your fork before starting the session. The way to do that depends on how you plan to manage git:</p>
 <ul>
 <li>If you are using <em>GitHub Desktop</em>, make sure that your fork is selected as <em>Current Repository</em>. click on <em>Repository → Pull</em> and select <em>upstream/main</em> as the branch to pull from.<br>
 If you are using <strong>VS Code</strong>, click on the <strong>Version Control</strong> icon in the left sidebar, then click on the three dots at the top and select <em>Pull from…</em>, then choose <em>upstream/main</em>.<br>

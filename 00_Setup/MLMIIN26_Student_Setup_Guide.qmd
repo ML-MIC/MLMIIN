@@ -258,9 +258,9 @@ VS Code has built-in support for git that is very convenient if you already have
 The first time you use git in VS Code, it may ask you to login to your GitHub account. Follow the instructions to authenticate.
 
 
-## 4. Get the Course Files
+# 4. Get the Course Files
 
-### 4.1 Fork the course repository
+## 4.1 Fork the course repository
 
 Login to GitHub on your web browser. Go to [https://github.com/ML-MIC/MLMIIN](https://github.com/ML-MIC/MLMIIN) and click on the fork icon (top-right) to create your own copy of the repository.
 
@@ -268,13 +268,13 @@ Login to GitHub on your web browser. Go to [https://github.com/ML-MIC/MLMIIN](ht
 
 We strongly suggest using `MLMIINfrk` as the name of your fork, so that it is easy to identify. Wait until the fork is completed and the web page for the forked repository is shown.
 
-### 4.2 Clone your fork to your computer
+## 4.2 Clone your fork to your computer
 
 This step depends on the tool you are using: **GitHub Desktop**, **VS Code**, or **git command line**. In either case you will start by clicking the green **Code** button on your forked repository page, and copying the URL shown (make sure **HTTPS** is selected) as in the picture below:
 
 <img src="./fig/GitHubCloneFork01.png" width=90%/>
 
-#### 4.2.1 Using GitHub Desktop
+### 4.2.1 Using GitHub Desktop
 
 Open *GitHub Desktop* and go to *File → Clone Repository...*. See the figure for the window that opens:
 
@@ -282,29 +282,33 @@ Open *GitHub Desktop* and go to *File → Clone Repository...*. See the figure f
 
 Make sure GitHub is selected and enter the name of the fork you created before (that is *MLMIINfrk* if you followed our advice). **Choose your course root** as local path where to clone the repository (this will be your  folder). Finally click on **Clone**.
 
+:::{.callout-important}
 In the next step make sure that you select *To contribute to the parent project* as illustrated below:
+:::
 
 <img src="./fig/GitHubCloneFork03.png" width=70%/>
 
 
-#### 4.2.2 Using VS Code
+### 4.2.2 Using VS Code
 
 Open *VS Code*. Press `Ctrl+Shift+P` (Windows) or `Cmd+Shift+P` (macOS) to open the command palette. Type `Git: Clone` and select it. 
 
 <img src="./fig/GitHubCloneFork04.png" width=90%/>
 
-Next, paste the URL you copied before and press Enter. 
+Next, paste **the URL of the forked repo** you copied before and press Enter.
+
+**Make sure that you use the forked repo and not the original one!** The URL should contain your GitHub username.
 
 <img src="./fig/GitHubCloneFork05.png" width=90%/>
 
 When prompted, **choose your course root** as the local *repository destination* (the repository will be clones as a subfolder of your course root folder). Wait until the cloning is completed. You can then open the folder in VS Code (and answer Yes about trusting the authors).
 
 
-## 5. Build the Course Docker Image
+# 5. Build the Course Docker Image
 
 Depending on your OS and hardware architecture, this can be a long process (expect up to 20–40 minutes). But you only need to **build the image once** (unless the course Dockerfile changes).
 
-### 5.1. MacOS
+## 5.1. MacOS
 
 1. Open *Terminal*.
 2. Use `cd` to navigate to the subfolder in your forked repository folder that contains the Dockerfile for the image; a typical example is:
@@ -329,30 +333,30 @@ docker images
 
 You should see something like `mlmiin   latest` in the list.
 
-### 5.2. Windows
+## 5.2. Windows
 
-1. Open **PowerShell**.
+1. Open *PowerShell*.
 2. Use `cd` to navigate to the subfolder in your forked repository folder that contains the Dockerfile for the image; a typical example is:
 
-```powershell
+```bash
 cd C:\Users\<yourname>\MIIN\ML\MLMIINfrk\00_Setup
 ```
 
 3. Build the image:
 
-```powershell
+```bash
 docker image build --file Dockerfile_x86 --tag mlmiin:latest .
 ```
 
 Check it with:
 
-```powershell
+```bash
 docker images
 ```
 
 You should see `mlmiin` listed.
 
-## 6. Run the Docker Container
+# 6. Run the Docker Container
 
 :::{.callout-important}
 
@@ -364,15 +368,13 @@ Additionally, this keeps the container isolated from other folders on your compu
 
 :::
 
-### 6.1. Command to run the container
+## 6.1. Command to run the container
 
 In *Terminal* for MacOS o or *PowerShell* for Windows, and **from your course root folder**, run the following command to start the container and the Jupyter kernel inside it.
 
 ```bash
 docker run -it --rm -p 8888:8888  -v "$PWD":/wd mlmiin:latest
 ```
-
-### 6.3. What you should see
 
 In the terminal, you should see Jupyter starting and eventually a line like:
 
@@ -393,9 +395,9 @@ http://localhost:8888
 :::
 
 
-## 7. Connect from VS Code to the Jupyter Kernel in Docker
+# 7. Connect from VS Code to the Jupyter Kernel in Docker
 
-### 7.1. Open the course folder in VS Code
+## 7.1. Open the course folder in VS Code
 
 If you have followed the steps above, you may have already opened the course folder in VS Code (you can check it by looking at the top of the VS Code window; it should show the folder name, such as `MLMIINfrk`).
 In that case skip to the next section.
@@ -407,14 +409,14 @@ If not, do the following:
 3. Select your course root folder.
 4. VS Code might ask if you trust the folder → click *Yes, I trust the authors*.
 
-### 7.2. Open a notebook
+## 7.2. Open a notebook
 
 In the VS Code *Explorer* panel (the first icon on the left side bar). Navigate to `00_Setup` and open the `1_1_Introduction.ipynb` notebook file (click it). The file may look different in your computer, because of the extensions you have installed, but it should be similar to this:
 
 <img src="./fig/Notebook_1_1_Introduction.png" width=70%/>
 
 
-### 7.3. Select the Jupyter server
+## 7.3. Select the Jupyter server
 
 At the top-right corner of the notebook editor panel, you should see a **Select Kernel** button:
 
@@ -464,7 +466,18 @@ For *every course session*, you will usually repeat these steps. Your instructir
 
 ## 8.2 Update course files
 
-**IMPORTANT:** Make a `git pull` from the `upstream` repository to get the latest course files. In your case the upstream repository is the original course repository at [https://github.com/ML-MIC/MLMIIN.git](https://github.com/ML-MIC/MLMIIN.git). When we update the course files (e.g. new notebooks, fixes, etc.) we will push them to that repository, and you will need to pull them into your fork before starting the session. The way to do that depends on how you plan to manage git:
+:::{.callout-important}
+
+##### Always update your fork before starting the session
+
+Make a `git pull` from the `upstream` repository to get the latest course files. Instructions follow.
+:::
+
+In your case the upstream repository is the original course repository at   
+
+[https://github.com/ML-MIC/MLMIIN.git](https://github.com/ML-MIC/MLMIIN.git) 
+
+When we update the course files (e.g. new notebooks, fixes, etc.) we will push them to that repository, and you will need to pull them into your fork before starting the session. The way to do that depends on how you plan to manage git:
    
    
   + If you are using *GitHub Desktop*, make sure that your fork is selected as *Current Repository*. 
