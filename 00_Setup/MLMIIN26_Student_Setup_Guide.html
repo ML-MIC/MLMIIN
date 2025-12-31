@@ -130,9 +130,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#open-the-course-folder-in-vs-code" id="toc-open-the-course-folder-in-vs-code" class="nav-link" data-scroll-target="#open-the-course-folder-in-vs-code">7.1. Open the course folder in VS Code</a></li>
   <li><a href="#open-a-notebook" id="toc-open-a-notebook" class="nav-link" data-scroll-target="#open-a-notebook">7.2. Open a notebook</a></li>
   <li><a href="#select-the-jupyter-server" id="toc-select-the-jupyter-server" class="nav-link" data-scroll-target="#select-the-jupyter-server">7.3. Select the Jupyter server</a></li>
-  <li><a href="#select-the-python-kernel" id="toc-select-the-python-kernel" class="nav-link" data-scroll-target="#select-the-python-kernel">7.4. Select the Python kernel</a></li>
   </ul></li>
-  <li><a href="#typical-workflow-for-each-session" id="toc-typical-workflow-for-each-session" class="nav-link" data-scroll-target="#typical-workflow-for-each-session">8. Typical Workflow for Each Session</a></li>
+  </ul></li>
+  <li><a href="#typical-workflow-for-each-session" id="toc-typical-workflow-for-each-session" class="nav-link" data-scroll-target="#typical-workflow-for-each-session">8. Typical Workflow for Each Session</a>
+  <ul class="collapse">
+  <li><a href="#preliminaries-get-the-jupyter-server-running-with-docker" id="toc-preliminaries-get-the-jupyter-server-running-with-docker" class="nav-link" data-scroll-target="#preliminaries-get-the-jupyter-server-running-with-docker">8.1 Preliminaries: get the Jupyter server running with Docker</a></li>
+  <li><a href="#update-course-files" id="toc-update-course-files" class="nav-link" data-scroll-target="#update-course-files">8.2 Update course files</a></li>
   <li><a href="#troubleshooting" id="toc-troubleshooting" class="nav-link" data-scroll-target="#troubleshooting">9. Troubleshooting</a>
   <ul class="collapse">
   <li><a href="#docker-permission-denied-linux-only" id="toc-docker-permission-denied-linux-only" class="nav-link" data-scroll-target="#docker-permission-denied-linux-only">9.1. “docker: permission denied” (Linux only)</a></li>
@@ -489,12 +492,8 @@ Keep terminal open
 </section>
 <section id="open-a-notebook" class="level3">
 <h3 class="anchored" data-anchor-id="open-a-notebook">7.2. Open a notebook</h3>
-<p>In the VS Code <em>Explorer</em> panel:</p>
-<ol type="1">
-<li>Navigate to <code>00_Setup</code>.</li>
-<li>Open the <code>1_1_Introduction.ipynb</code> notebook file (click it).</li>
-</ol>
-<p>The file may look different in your computer, because of the extensions you have installed, but it should be similar to this:</p>
+<p>In the VS Code <em>Explorer</em> panel (the first icon on the left side bar). Navigate to <code>00_Setup</code> and open the <code>1_1_Introduction.ipynb</code> notebook file (click it). The file may look different in your computer, because of the extensions you have installed, but it should be similar to this:</p>
+<p><img src="./fig/Notebook_1_1_Introduction.png" width="70%/"></p>
 </section>
 <section id="select-the-jupyter-server" class="level3">
 <h3 class="anchored" data-anchor-id="select-the-jupyter-server">7.3. Select the Jupyter server</h3>
@@ -507,49 +506,42 @@ Keep terminal open
 <p>Click on <em>Yes</em> to connect to the server. It is safe to ignore the warning about untrusted server, as we are the ones running it locally. In the next dialog, accept <code>localhost</code> as the name of the server by clicking <em>Enter</em>.<br>
 Finally click on the Python 3 (ipykernel) option to select the kernel.</p>
 <p><img src="./fig/VSCode_SelectKernel_04.png" width="90%/"></p>
-<p>Now you are ready to start executing cells in the notebook.</p>
+<p>Now you are ready to start executing Python cells in the notebook. Search for the section with title <em>Python Setup Checks</em> in the notebook and run the cells there to verify that everything is working correctly. Let your instructor know if you encounter any issues.</p>
 </section>
-<section id="select-the-python-kernel" class="level3">
-<h3 class="anchored" data-anchor-id="select-the-python-kernel">7.4. Select the Python kernel</h3>
-<p>At the top-right of the notebook, you will see a <strong>kernel selector</strong> (often showing something like “Python 3.x”):</p>
+</section>
+</section>
+<section id="typical-workflow-for-each-session" class="level1">
+<h1>8. Typical Workflow for Each Session</h1>
+<p>For <em>every course session</em>, you will usually repeat these steps. Your instructirs will remind you to do so at the start of the first few sessions, but eventually it will be your responsibility to remember to do this.</p>
+<section id="preliminaries-get-the-jupyter-server-running-with-docker" class="level2">
+<h2 class="anchored" data-anchor-id="preliminaries-get-the-jupyter-server-running-with-docker">8.1 Preliminaries: get the Jupyter server running with Docker</h2>
 <ol type="1">
-<li>Click on the kernel name.</li>
-<li>You should see a list of kernels.</li>
-<li>Choose the one corresponding to the <strong>conda environment inside Docker</strong> (often just “Python 3 (ipykernel)” if only one is available).</li>
-</ol>
-<p>If everything is configured correctly, running a cell should now execute <strong>inside the Docker container</strong>.</p>
-<p>Try this test cell:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sys.executable)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Current directory:"</span>, os.getcwd())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>You should see that Python is running from a path inside the container (e.g.&nbsp;<code>/opt/conda/...</code>) and that the current directory is something like <code>/wd</code> or <code>/wd/1_1_Introduction</code> depending on where the notebook lives.</p>
-<hr>
-</section>
-</section>
-<section id="typical-workflow-for-each-session" class="level2">
-<h2 class="anchored" data-anchor-id="typical-workflow-for-each-session">8. Typical Workflow for Each Session</h2>
-<p>For <strong>every course session</strong>, you will usually repeat these steps:</p>
-<ol type="1">
-<li><strong>Start Docker Desktop</strong> (Windows/macOS) → wait until it’s running.</li>
+<li><em>Start Docker Desktop</em> (Windows/macOS) → wait until it’s running.</li>
 <li>Open a terminal (macOS) or PowerShell (Windows).</li>
 <li>Go to your course root folder, e.g.:
 <ul>
 <li><p>macOS:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/MLMIIN</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/ML/MIIN</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>Windows (PowerShell):</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cd</span> C<span class="op">:</span>\Users\<span class="op">&lt;</span>yourname<span class="op">&gt;</span>\MLMIIN</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> C:<span class="dt">\U</span>sers<span class="dt">\&lt;</span>yourname<span class="op">&gt;</span><span class="dt">\M</span>L\MIIN</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul></li>
-<li>Start the container:
+<li>Start the container: <code>bash      docker run -it --rm -p 8888:8888 -v "$PWD":/wd mlmiin:latest</code></li>
+<li>Open <em>VS Code</em>, open the <em>MIIN</em> folder (it contains your fork MIINfrk as a subfolder).</li>
+</ol>
+</section>
+<section id="update-course-files" class="level2">
+<h2 class="anchored" data-anchor-id="update-course-files">8.2 Update course files</h2>
+<p><strong>IMPORTANT:</strong> Make a <code>git pull</code> from the <code>upstream</code> repository to get the latest course files. In your case the upstream repository is the original course repository at <a href="https://github.com/ML-MIC/MLMIIN.git">https://github.com/ML-MIC/MLMIIN.git</a>. When we update the course files (e.g.&nbsp;new notebooks, fixes, etc.) we will push them to that repository, and you will need to pull them into your fork before starting the session. The way to do that depends on how you plan to manage git:</p>
 <ul>
-<li><p>macOS/Linux:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> <span class="at">--rm</span> <span class="at">-p</span> 8888:8888 <span class="at">-v</span> <span class="st">"</span><span class="va">$PWD</span><span class="st">"</span>:/wd mlmiin:latest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>Windows (PowerShell):</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>docker run <span class="op">-</span>it <span class="op">--</span>rm <span class="op">-</span>p <span class="dv">8888</span><span class="op">:</span><span class="dv">8888</span> <span class="op">-</span>v <span class="st">"</span><span class="pp">${</span><span class="va">PWD</span><span class="pp">}</span><span class="st">:/wd"</span> mlmiin<span class="op">:</span>latest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-</ul></li>
-<li>Open <strong>VS Code</strong>, open the <strong>MLMIIN</strong> folder.</li>
-<li>Open the desired notebook (<code>.ipynb</code>).</li>
+<li>If you are using <em>GitHub Desktop</em>, make sure that your fork is selected as <em>Current Repository</em>. click on <em>Repository → Pull</em> and select <em>upstream/main</em> as the branch to pull from.<br>
+If you are using <strong>VS Code</strong>, click on the <strong>Version Control</strong> icon in the left sidebar, then click on the three dots at the top and select <em>Pull from…</em>, then choose <em>upstream/main</em>.<br>
+If you are using <strong>git command line</strong>, run:</li>
+</ul>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull upstream main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>(You only need to set up the <em>upstream</em> remote once; if you haven’t done it yet, see the images below for instructions.)</p>
+<ol start="6" type="1">
+<li>Open a notebook (<code>.ipynb</code>). We strongly recommend that you start by making a copy<br>
+</li>
 <li>Make sure VS Code is connected to <code>http://localhost:8888</code> as the Jupyter server.</li>
 <li>Select the Python kernel and start running cells.</li>
 </ol>
@@ -557,6 +549,7 @@ Finally click on the Python 3 (ipykernel) option to select the kernel.</p>
 <p><img src="./fig/VSCodeAddRemote01.png" width="70%/"></p>
 <p><img src="./fig/VSCodeAddRemote02.png" width="90%/"></p>
 <p><img src="./fig/VSCodeAddRemote03.png" width="90%/"></p>
+<p><img src="./fig/VSCodePullUpstream.png" width="90%/"></p>
 <hr>
 </section>
 <section id="troubleshooting" class="level2">
@@ -566,7 +559,7 @@ Finally click on the Python 3 (ipykernel) option to select the kernel.</p>
 <p>If you’re on Linux and see a <strong>permission denied</strong> error when running Docker:</p>
 <ol type="1">
 <li><p>Add your user to the <code>docker</code> group:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> docker <span class="va">$USER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> docker <span class="va">$USER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>Log out and log back in, or reboot.</p></li>
 <li><p>Try again.</p></li>
 </ol>
@@ -585,7 +578,7 @@ Make sure you used <code>-p 8888:8888</code>.</li>
 On Windows/macOS, Docker Desktop must be open and running.</li>
 </ol>
 <p>You can also run:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>to see if the container is listed.</p>
 <hr>
 </section>
@@ -611,8 +604,8 @@ On Windows/macOS, Docker Desktop must be open and running.</li>
 <p>Check:</p>
 <ol type="1">
 <li><p>In the notebook, run:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sys.executable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sys.executable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If it does <strong>not</strong> point to <code>/opt/conda/envs/...</code> inside the container, you are using the wrong kernel.</p></li>
 <li><p>Make sure all <code>.py</code> helper files given by the instructor are present in the <strong>course root</strong> (or the correct subfolder).</p></li>
 </ol>

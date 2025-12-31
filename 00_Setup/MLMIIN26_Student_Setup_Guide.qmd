@@ -409,14 +409,9 @@ If not, do the following:
 
 ### 7.2. Open a notebook
 
-In the VS Code *Explorer* panel:
+In the VS Code *Explorer* panel (the first icon on the left side bar). Navigate to `00_Setup` and open the `1_1_Introduction.ipynb` notebook file (click it). The file may look different in your computer, because of the extensions you have installed, but it should be similar to this:
 
-1. Navigate to `00_Setup`.
-2. Open the `1_1_Introduction.ipynb` notebook file (click it).
-
-The file may look different in your computer, because of the extensions you have installed, but it should be similar to this:
-
-
+<img src="./fig/Notebook_1_1_Introduction.png" width=70%/>
 
 
 ### 7.3. Select the Jupyter server
@@ -441,59 +436,47 @@ Finally click on the Python 3 (ipykernel) option to select the kernel.
 
 <img src="./fig/VSCode_SelectKernel_04.png" width=90%/>
 
-Now you are ready to start executing cells in the notebook.
+Now you are ready to start executing Python cells in the notebook. Search for the section with title *Python Setup Checks* in the notebook and run the cells there to verify that everything is working correctly. Let your instructor know if you encounter any issues.
 
 
-### 7.4. Select the Python kernel
+# 8. Typical Workflow for Each Session
 
-At the top-right of the notebook, you will see a **kernel selector** (often showing something like “Python 3.x”):
+For *every course session*, you will usually repeat these steps. Your instructirs will remind you to do so at the start of the first few sessions, but eventually it will be your responsibility to remember to do this.
 
-1. Click on the kernel name.
-2. You should see a list of kernels.
-3. Choose the one corresponding to the **conda environment inside Docker** (often just “Python 3 (ipykernel)” if only one is available).
+## 8.1 Preliminaries: get the Jupyter server running with Docker
 
-If everything is configured correctly, running a cell should now execute **inside the Docker container**.
-
-Try this test cell:
-
-```python
-import sys
-print(sys.executable)
-
-import os
-print("Current directory:", os.getcwd())
-```
-
-You should see that Python is running from a path inside the container (e.g. `/opt/conda/...`) and that the current directory is something like `/wd` or `/wd/1_1_Introduction` depending on where the notebook lives.
-
----
-
-## 8. Typical Workflow for Each Session
-
-For **every course session**, you will usually repeat these steps:
-
-1. **Start Docker Desktop** (Windows/macOS) → wait until it’s running.
+1. *Start Docker Desktop* (Windows/macOS) → wait until it’s running.
 2. Open a terminal (macOS) or PowerShell (Windows).
 3. Go to your course root folder, e.g.:
    - macOS:
      ```bash
-     cd ~/MLMIIN
+     cd ~/ML/MIIN
      ```
    - Windows (PowerShell):
-     ```powershell
-     cd C:\Users\<yourname>\MLMIIN
+     ```bash
+     cd C:\Users\<yourname>\ML\MIIN
      ```
 4. Start the container:
-   - macOS/Linux:
      ```bash
      docker run -it --rm -p 8888:8888 -v "$PWD":/wd mlmiin:latest
      ```
-   - Windows (PowerShell):
-     ```powershell
-     docker run -it --rm -p 8888:8888 -v "${PWD}:/wd" mlmiin:latest
-     ```
-5. Open **VS Code**, open the **MLMIIN** folder.
-6. Open the desired notebook (`.ipynb`).
+5. Open *VS Code*, open the *MIIN* folder (it contains your fork MIINfrk as a subfolder).
+
+## 8.2 Update course files
+
+**IMPORTANT:** Make a `git pull` from the `upstream` repository to get the latest course files. In your case the upstream repository is the original course repository at [https://github.com/ML-MIC/MLMIIN.git](https://github.com/ML-MIC/MLMIIN.git). When we update the course files (e.g. new notebooks, fixes, etc.) we will push them to that repository, and you will need to pull them into your fork before starting the session. The way to do that depends on how you plan to manage git:
+   
+   
+  + If you are using *GitHub Desktop*, make sure that your fork is selected as *Current Repository*. 
+  click on *Repository → Pull* and select *upstream/main* as the branch to pull from.  
+   If you are using **VS Code**, click on the **Version Control** icon in the left sidebar, then click on the three dots at the top and select *Pull from...*, then choose *upstream/main*.  
+   If you are using **git command line**, run:
+   ```bash
+   git pull upstream main
+   ```
+   (You only need to set up the *upstream* remote once; if you haven’t done it yet, see the images below for instructions.)
+
+6. Open a notebook (`.ipynb`). We strongly recommend that you start by making a copy  
 7. Make sure VS Code is connected to `http://localhost:8888` as the Jupyter server.
 8. Select the Python kernel and start running cells.
 
@@ -506,6 +489,7 @@ For **every course session**, you will usually repeat these steps:
 
 <img src="./fig/VSCodeAddRemote03.png" width=90%/>
 
+<img src="./fig/VSCodePullUpstream.png" width=90%/>
 
 
 ---
