@@ -534,7 +534,11 @@ and press Enter. When prompted for the remote name, enter `upstream` and press E
 
 At the beginning of each session you will need to pull the latest changes from upstream. To do so, click again on the *Source Control* icon in the left sidebar. Then click on the three dots next to *Changes* and select *Remote → Pull from* as illustrated below:
 
-<img src="./fig/VSCodePullUpstream.png" width=90%/>
+<img src="./fig/VSCodePullUpstream01.png" width=90%/>
+
+In the text field at the top, select `upstream` as shown below:
+
+<img src="./fig/VSCodePullUpstream02.png" width=90%/>
 
 
 ---
