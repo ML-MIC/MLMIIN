@@ -110,6 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#configure-github-desktop" id="toc-configure-github-desktop" class="nav-link" data-scroll-target="#configure-github-desktop">3.4.1 Configure GitHub Desktop</a></li>
   </ul></li>
   <li><a href="#using-git-in-vs-code" id="toc-using-git-in-vs-code" class="nav-link" data-scroll-target="#using-git-in-vs-code">3.5. Using git in VS Code</a></li>
+  <li><a href="#the-.gitignore-file-and-excluded-folders" id="toc-the-.gitignore-file-and-excluded-folders" class="nav-link" data-scroll-target="#the-.gitignore-file-and-excluded-folders">3.6. The .gitignore file and excluded folders</a></li>
   </ul></li>
   <li><a href="#get-the-course-files" id="toc-get-the-course-files" class="nav-link" data-scroll-target="#get-the-course-files">4. Get the Course Files</a>
   <ul class="collapse">
@@ -143,15 +144,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#using-github-desktop-1" id="toc-using-github-desktop-1" class="nav-link" data-scroll-target="#using-github-desktop-1">8.2.1. Using GitHub Desktop</a></li>
   <li><a href="#using-vs-code-1" id="toc-using-vs-code-1" class="nav-link" data-scroll-target="#using-vs-code-1">8.2.2. Using VS Code</a></li>
   </ul></li>
-  <li><a href="#troubleshooting" id="toc-troubleshooting" class="nav-link" data-scroll-target="#troubleshooting">9. Troubleshooting</a>
-  <ul class="collapse">
-  <li><a href="#docker-permission-denied-linux-only" id="toc-docker-permission-denied-linux-only" class="nav-link" data-scroll-target="#docker-permission-denied-linux-only">9.1. “docker: permission denied” (Linux only)</a></li>
-  <li><a href="#browservs-code-cannot-connect-to-httplocalhost8888" id="toc-browservs-code-cannot-connect-to-httplocalhost8888" class="nav-link" data-scroll-target="#browservs-code-cannot-connect-to-httplocalhost8888">9.2. Browser/VS Code cannot connect to <code>http://localhost:8888</code></a></li>
-  <li><a href="#vs-code-no-jupyter-server-running" id="toc-vs-code-no-jupyter-server-running" class="nav-link" data-scroll-target="#vs-code-no-jupyter-server-running">9.3. VS Code “No Jupyter server running”</a></li>
-  <li><a href="#importerror-modulenotfounderror" id="toc-importerror-modulenotfounderror" class="nav-link" data-scroll-target="#importerror-modulenotfounderror">9.4. ImportError / ModuleNotFoundError</a></li>
+  <li><a href="#some-tips-about-merge-conflicts" id="toc-some-tips-about-merge-conflicts" class="nav-link" data-scroll-target="#some-tips-about-merge-conflicts">8.3. Some tips about merge conflicts</a></li>
   </ul></li>
-  <li><a href="#getting-help" id="toc-getting-help" class="nav-link" data-scroll-target="#getting-help">10. Getting Help</a></li>
-  <li><a href="#optional-install-latex-for-pdf-export" id="toc-optional-install-latex-for-pdf-export" class="nav-link" data-scroll-target="#optional-install-latex-for-pdf-export">11. (Optional) Install LaTeX for PDF Export</a></li>
+  <li><a href="#install-latex-for-pdf-export" id="toc-install-latex-for-pdf-export" class="nav-link" data-scroll-target="#install-latex-for-pdf-export">9. Install LaTeX for PDF Export</a>
+  <ul class="collapse">
+  <li><a href="#macos-1" id="toc-macos-1" class="nav-link" data-scroll-target="#macos-1">9.1. MacOS</a></li>
+  <li><a href="#windows-1" id="toc-windows-1" class="nav-link" data-scroll-target="#windows-1">9.2. Windows</a></li>
+  </ul></li>
+  <li><a href="#install-quarto-quarto-extension-for-vs-code" id="toc-install-quarto-quarto-extension-for-vs-code" class="nav-link" data-scroll-target="#install-quarto-quarto-extension-for-vs-code">10. Install Quarto &amp; Quarto Extension for VS Code</a>
+  <ul class="collapse">
+  <li><a href="#about-quarto-and-setup" id="toc-about-quarto-and-setup" class="nav-link" data-scroll-target="#about-quarto-and-setup">10.1. About Quarto and setup</a></li>
+  <li><a href="#quarto-extension-for-vs-code" id="toc-quarto-extension-for-vs-code" class="nav-link" data-scroll-target="#quarto-extension-for-vs-code">10.2. Quarto extension for VS Code</a></li>
+  <li><a href="#using-quarto-to-render-notebooks" id="toc-using-quarto-to-render-notebooks" class="nav-link" data-scroll-target="#using-quarto-to-render-notebooks">10.3. Using Quarto to render notebooks</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -377,6 +381,20 @@ https://www.docker.com/products/docker-desktop/</li>
 <p>VS Code has built-in support for git that is very convenient if you already have some experience with git. You can access it by clicking on the <strong>Source Control</strong> icon in the left sidebar (it looks like a branch with a dot). From there, you can clone repositories, commit changes, push to remote repositories, and more.</p>
 <p>The first time you use git in VS Code, it may ask you to login to your GitHub account. Follow the instructions to authenticate.</p>
 </section>
+<section id="the-.gitignore-file-and-excluded-folders" class="level2">
+<h2 class="anchored" data-anchor-id="the-.gitignore-file-and-excluded-folders">3.6. The .gitignore file and excluded folders</h2>
+<p>Your fork of the course repository includes a <code>.gitignore</code> file that excludes certain folders and files from being tracked by git. This is important to avoid committing large files (such as large datasets) or temporary files that are not relevant to the course.</p>
+<p>In particular, the <code>.gitignore</code> file excludes: + A folder called <code>data</code> that we will use to store datasets. + A folder called <code>exclude</code> that you can use to store any files you do not want git to track. For example, you can use a text file in that folder to store sensitive information such as API keys, passwords, etc. that you do not want to commit to your repository.</p>
+<p>The files in these folders are still available to your notebooks when you run the Docker container, but they will not be committed to your git repository. This helps keep your repository clean and avoids unnecessary large files.</p>
+<p>Of course any file in your <em>course root</em> folder but outside your forked repository folder (e.g.&nbsp;<code>MLMIINfrk</code>) will also be ignored by git.</p>
+<p>Go ahead and create these folders now inside your forked repository folder (e.g.&nbsp;<code>MLMIINfrk</code>). Open a terminal (macOS) or PowerShell (Windows), navigate to your forked repository folder, and run:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> data exclude</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now run</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>and verify that these folders do not appear in the list of untracked files. If you have followed these instructions up to this point, git should answer</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">On</span> branch main</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">nothing</span> to commit, working tree clean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
 </section>
 <section id="get-the-course-files" class="level1">
 <h1>4. Get the Course Files</h1>
@@ -430,14 +448,14 @@ Important
 <li>Open <em>Terminal</em>.</li>
 <li>Use <code>cd</code> to navigate to the subfolder in your forked repository folder that contains the Dockerfile for the image; a typical example is:</li>
 </ol>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/MIIN/ML/MLMIINfrk/00_Setup</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/MIIN/ML/MLMIINfrk/00_Setup</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Here <code>~</code> stands for your home folder, and so <code>~/MIIN/ML</code> is the course root folder.</p>
 <ol start="3" type="1">
 <li>Build the image by running:</li>
 </ol>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image build <span class="at">--file</span> Dockerfile_mac <span class="at">--tag</span> mlmiin:latest .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image build <span class="at">--file</span> Dockerfile_mac <span class="at">--tag</span> mlmiin:latest .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This can take a while the first time (it creates the conda environment and installs all required libraries). When it finishes, you can confirm the image exists:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You should see something like <code>mlmiin   latest</code> in the list.</p>
 </section>
 <section id="windows" class="level2">
@@ -446,13 +464,13 @@ Important
 <li>Open <em>PowerShell</em>.</li>
 <li>Use <code>cd</code> to navigate to the subfolder in your forked repository folder that contains the Dockerfile for the image; a typical example is:</li>
 </ol>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> C:<span class="dt">\U</span>sers<span class="dt">\&lt;</span>yourname<span class="op">&gt;</span><span class="dt">\M</span>IIN\ML\MLMIINfrk\00_Setup</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> C:<span class="dt">\U</span>sers<span class="dt">\&lt;</span>yourname<span class="op">&gt;</span><span class="dt">\M</span>IIN\ML\MLMIINfrk\00_Setup</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ol start="3" type="1">
 <li>Build the image:</li>
 </ol>
-<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image build <span class="at">--file</span> Dockerfile_x86 <span class="at">--tag</span> mlmiin:latest .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> image build <span class="at">--file</span> Dockerfile_x86 <span class="at">--tag</span> mlmiin:latest .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Check it with:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> images</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You should see <code>mlmiin</code> listed.</p>
 </section>
 </section>
@@ -475,11 +493,11 @@ Choose the right folder to run the container from
 <section id="command-to-run-the-container" class="level2">
 <h2 class="anchored" data-anchor-id="command-to-run-the-container">6.1. Command to run the container</h2>
 <p>In <em>Terminal</em> for MacOS o or <em>PowerShell</em> for Windows, and <strong>from your course root folder</strong>, run the following command to start the container and the Jupyter kernel inside it.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> <span class="at">--rm</span> <span class="at">-p</span> 8888:8888  <span class="at">-v</span> <span class="st">"</span><span class="va">$PWD</span><span class="st">"</span>:/wd mlmiin:latest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> <span class="at">--rm</span> <span class="at">-p</span> 8888:8888  <span class="at">-v</span> <span class="st">"</span><span class="va">$PWD</span><span class="st">"</span>:/wd mlmiin:latest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In the terminal, you should see Jupyter starting and eventually a line like:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8888/lab</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://127.0.0.1:8888/lab</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In our course image, Jupyter is configured without a token (password), so the URL we need is simply</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://localhost:8888</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://localhost:8888</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -551,9 +569,9 @@ Finally click on the Python 3 (ipykernel) option to select the kernel.</p>
 <li>Go to your course root folder, e.g.:
 <ul>
 <li><p>macOS:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/ML/MIIN</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/ML/MIIN</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>Windows (PowerShell):</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> C:<span class="dt">\U</span>sers<span class="dt">\&lt;</span>yourname<span class="op">&gt;</span><span class="dt">\M</span>L\MIIN</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> C:<span class="dt">\U</span>sers<span class="dt">\&lt;</span>yourname<span class="op">&gt;</span><span class="dt">\M</span>L\MIIN</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul></li>
 <li>Start the container: <code>bash      docker run -it --rm -p 8888:8888 -v "$PWD":/wd mlmiin:latest</code></li>
 <li>Open <em>VS Code</em>, open the <em>MIIN</em> folder (it contains your fork MIINfrk as a subfolder).</li>
@@ -582,8 +600,62 @@ Always update your fork before starting the session
 <p>In <em>GitHub Desktop</em>, make sure that your fork is selected as <em>Current Repository</em>.</p>
 <p><img src="./fig/GitHubDesktopCurrentRepo.png" width="50%/"></p>
 <p>Then click on <em>Repository → Open in Terminal</em> and wait for the terminal window to open. When it does, type</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull upstream main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull upstream main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>And wait for the operation to complete.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>If you have made changes in files that have also been modified in the upstream repository, you may see <strong>merge conflicts</strong>. In that case, contact your instructor for help. Also see below some tips to minimize the chances of conflicts.</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>If you get an error about the <code>upstream</code> remote not existing, it means you have not yet added it. In that case, you can ask your instructor for help. But essentially, you need to open a terminal window and run:</li>
+</ul>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add upstream https://github.com/ML-MIC/MLMIIN.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="using-vs-code-1" class="level3">
+<h3 class="anchored" data-anchor-id="using-vs-code-1">8.2.2. Using VS Code</h3>
+<section id="add-the-upstream-remote-one-time" class="level4">
+<h4 class="anchored" data-anchor-id="add-the-upstream-remote-one-time">8.2.2.1 Add the upstream remote (one-time)</h4>
+<p>First you will need to add the <em>upstream</em> remote. <strong>But you only need to do this once!</strong> Start by clicking on the <strong>Source Control</strong> icon in the left sidebar. It looks like this</p>
+<p><img src="./fig/VSCodeVersionControlIcon.png" width="7%/"></p>
+<p>Then click on the three dots next to <em>Changes</em> and select <em>Remote → Add Remote…</em> as illustrated below:</p>
+<p><img src="./fig/VSCodeAddRemote01.png" width="70%/"></p>
+<p>You will see a text field at the top like this one:</p>
+<p><img src="./fig/VSCodeAddRemote02.png" width="90%/"></p>
+<p>Enter the URL for the <code>upstream</code> repository, which is</p>
+<p><a href="https://github.com/ML-MIC/MLMIIN.git">https://github.com/ML-MIC/MLMIIN.git</a></p>
+<p>and press Enter. When prompted for the remote name, enter <code>upstream</code> and press Enter again.</p>
+<p><img src="./fig/VSCodeAddRemote03.png" width="90%/"></p>
+</section>
+<section id="pull-from-upstream-every-session" class="level4">
+<h4 class="anchored" data-anchor-id="pull-from-upstream-every-session">8.2.2.2 Pull from upstream (every session)</h4>
+<p>At the beginning of each session you will need to pull the latest changes from upstream. To do so, click on Terminal → New Terminal to open a terminal window in VS Code.</p>
+<!-- <img src="./fig/VSCodePullUpstream01.png" width=90%/> -->
+<p>When the terminal opens in the bottom panel, make sure that you are located in the <code>MLMIINfrk</code> folder (it should appear in the prompt). Then type the following command and hot <em>Enter</em>.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull upstream main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Wait for the operation to complete.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -598,120 +670,68 @@ Warning
 </div>
 </div>
 </section>
-<section id="using-vs-code-1" class="level3">
-<h3 class="anchored" data-anchor-id="using-vs-code-1">8.2.2. Using VS Code</h3>
-<section id="add-the-upstream-remote-one-time" class="level4">
-<h4 class="anchored" data-anchor-id="add-the-upstream-remote-one-time">8.2.2.1 Add the upstream remote (one-time)</h4>
-<p>First you will need to add the <em>upstream</em> remote. <strong>But you only need to do this once!</strong> Start by clicking on the <strong>Source Control</strong> icon in the left sidebar. It looks like this</p>
-<p><img src="./fig/VSCodeVersionControlIcon.png" width="10%/"></p>
-<p>Then click on the three dots next to <em>Changes</em> and select <em>Remote → Add Remote…</em> as illustrated below:</p>
-<p><img src="./fig/VSCodeAddRemote01.png" width="70%/"></p>
-<p>You will see a text field at the top like this one:</p>
-<p><img src="./fig/VSCodeAddRemote02.png" width="90%/"></p>
-<p>Enter the URL for the <code>upstream</code> repository, which is</p>
-<p><a href="https://github.com/ML-MIC/MLMIIN.git">https://github.com/ML-MIC/MLMIIN.git</a></p>
-<p>and press Enter. When prompted for the remote name, enter <code>upstream</code> and press Enter again.</p>
-<p><img src="./fig/VSCodeAddRemote03.png" width="90%/"></p>
-</section>
-<section id="pull-from-upstream-every-session" class="level4">
-<h4 class="anchored" data-anchor-id="pull-from-upstream-every-session">8.2.2.2 Pull from upstream (every session)</h4>
-<p>At the beginning of each session you will need to pull the latest changes from upstream. To do so, click again on the <em>Source Control</em> icon in the left sidebar. Then click on the three dots next to <em>Changes</em> and select <em>Remote → Pull from</em> as illustrated below:</p>
-<p><img src="./fig/VSCodePullUpstream01.png" width="90%/"></p>
-<p>In the text field at the top, select <code>upstream</code> as shown below:</p>
-<p><img src="./fig/VSCodePullUpstream02.png" width="90%/"></p>
-<p>and wait for the operation to complete. You will see a text field at the top left with ‘Commit’ under it.</p>
-<p><img src="./fig/VSCodePullUpstream03.png" width="90%/"></p>
-<p>Enter <code>Pulled latest changes from upstream</code> (or a similar, possibly more informative one) and click on the check mark icon to commit the changes to your fork. VS Code will warn you that you have not explicitly added any changes, but you can trust it to manage that for you.</p>
-<p>&lt;<img src="./fig/VSCodePullUpstream04.png" width="90%/"></p>
-<p>Then a new text field will appear at the top asking you to <em>Sync Changes</em>. Click on it to push the changes to your fork on GitHub, and also click Ok when VS Code ask for confirmation.</p>
-<p>&lt;<img src="./fig/VSCodePullUpstream05.png" width="90%/"></p>
-<hr>
 </section>
 </section>
+<section id="some-tips-about-merge-conflicts" class="level2">
+<h2 class="anchored" data-anchor-id="some-tips-about-merge-conflicts">8.3. Some tips about merge conflicts</h2>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Again: Always make your own copy of the course notebooks!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We said it before, but this is really the best way to avoid merge conflicts: <strong>make a copy of the course notebooks</strong> to avoid modifying the original files.</p>
+</div>
+</div>
 </section>
-<section id="troubleshooting" class="level2">
-<h2 class="anchored" data-anchor-id="troubleshooting">9. Troubleshooting</h2>
-<section id="docker-permission-denied-linux-only" class="level3">
-<h3 class="anchored" data-anchor-id="docker-permission-denied-linux-only">9.1. “docker: permission denied” (Linux only)</h3>
-<p>If you’re on Linux and see a <strong>permission denied</strong> error when running Docker:</p>
-<ol type="1">
-<li><p>Add your user to the <code>docker</code> group:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> docker <span class="va">$USER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>Log out and log back in, or reboot.</p></li>
-<li><p>Try again.</p></li>
-</ol>
-<p>(Windows/macOS users normally do <strong>not</strong> see this issue.)</p>
-<hr>
 </section>
-<section id="browservs-code-cannot-connect-to-httplocalhost8888" class="level3">
-<h3 class="anchored" data-anchor-id="browservs-code-cannot-connect-to-httplocalhost8888">9.2. Browser/VS Code cannot connect to <code>http://localhost:8888</code></h3>
-<p>Check:</p>
-<ol type="1">
-<li>Is the container running?<br>
-Look at the terminal where you ran <code>docker run</code>. Jupyter logs should be visible.</li>
-<li>Did you map the port?<br>
-Make sure you used <code>-p 8888:8888</code>.</li>
-<li>Is Docker Desktop running?<br>
-On Windows/macOS, Docker Desktop must be open and running.</li>
-</ol>
-<p>You can also run:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> ps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>to see if the container is listed.</p>
-<hr>
+<section id="install-latex-for-pdf-export" class="level1">
+<h1>9. Install LaTeX for PDF Export</h1>
+<section id="macos-1" class="level2">
+<h2 class="anchored" data-anchor-id="macos-1">9.1. MacOS</h2>
+<p>We will use LaTeX to export notebooks to PDF. You need to install it on your host machine (outside the Docker container).</p>
+<p>Install LaTeX from <a href="https://www.tug.org/mactex/">https://www.tug.org/mactex/</a>. We recommend installing BasicTeX (smaller download) unless you plan to use LaTeX heavily outside this course. See the figure of the MacTex website below for reference</p>
+<p>&lt;<img src="./fig/MacTexWebsite.png" width="90%/"></p>
+<p>If you are comfortable with the command line, you can also install it using Homebrew:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install <span class="at">--cask</span> basictex</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="vs-code-no-jupyter-server-running" class="level3">
-<h3 class="anchored" data-anchor-id="vs-code-no-jupyter-server-running">9.3. VS Code “No Jupyter server running”</h3>
+<section id="windows-1" class="level2">
+<h2 class="anchored" data-anchor-id="windows-1">9.2. Windows</h2>
+<p>Install MiKTeX from <a href="https://miktex.org/download">https://miktex.org/download</a>. See the figure of the MikTex website below for reference</p>
+<p>&lt;<img src="./fig/MikTexWebsite.png" width="90%/"></p>
+</section>
+</section>
+<section id="install-quarto-quarto-extension-for-vs-code" class="level1">
+<h1>10. Install Quarto &amp; Quarto Extension for VS Code</h1>
+<section id="about-quarto-and-setup" class="level2">
+<h2 class="anchored" data-anchor-id="about-quarto-and-setup">10.1. About Quarto and setup</h2>
+<p>Quarto is a scientific and technical publishing system built on Pandoc. It is used to create documents, presentations, websites, and more, using plain text files with simple formatting syntax. And it offers an (arguably superior) alternative to Jupyter notebooks for creating documents that combine code, text, and visualizations:</p>
 <ul>
-<li>Make sure the Docker container is running and Jupyter has started.</li>
-<li>Try <code>Jupyter: Select Jupyter Server</code> again and enter <code>http://localhost:8888</code>.</li>
-<li>Ensure the <strong>Jupyter extension</strong> is installed and enabled.</li>
-<li>Make sure you <strong>trusted the workspace</strong>.</li>
+<li>Being plain-text based, it works well with git version control systems (opposite to Jupyter notebooks, which are JSON files that do not work well with git, to say the least).</li>
+<li>Quarto documents can be very easily converted to multiple output formats (HTML, PDF, Word, etc.) from the same source file. Jupyter notebooks are more limited in this regard.</li>
+<li>Quarto documents can combine different programming languages (Python, R, Julia, C++, etc.) <strong>in the same document</strong>, while Jupyter notebooks are limited to a single kernel/language per notebook.</li>
 </ul>
-<hr>
+<p>Despite this praise of Quarto documents, we acknowledge that Jupyter notebooks are very popular in the data science and machine learning community, and they have become the current <em>de facto</em> standard for interactive coding. Therefore, we will focus on Jupyter notebooks in this course. However, if you are interested in learning about Quarto, let us know, and we can provide additional resources and guidance.</p>
+<p>You can install Quarto from <a href="https://quarto.org/docs/get-started/">https://quarto.org/docs/get-started/</a>.</p>
 </section>
-<section id="importerror-modulenotfounderror" class="level3">
-<h3 class="anchored" data-anchor-id="importerror-modulenotfounderror">9.4. ImportError / ModuleNotFoundError</h3>
-<p>If you see an error like:</p>
-<pre class="text"><code>ModuleNotFoundError: No module named 'XYZ'</code></pre>
-<p>It usually means:</p>
-<ul>
-<li>You are not using the correct kernel (not the one inside the Docker env), or</li>
-<li>The course helper <code>.py</code> file is not located in the course folder mounted into <code>/wd</code>.</li>
-</ul>
-<p>Check:</p>
-<ol type="1">
-<li><p>In the notebook, run:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sys.executable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>If it does <strong>not</strong> point to <code>/opt/conda/envs/...</code> inside the container, you are using the wrong kernel.</p></li>
-<li><p>Make sure all <code>.py</code> helper files given by the instructor are present in the <strong>course root</strong> (or the correct subfolder).</p></li>
-</ol>
-<hr>
-</section>
-</section>
-<section id="getting-help" class="level2">
-<h2 class="anchored" data-anchor-id="getting-help">10. Getting Help</h2>
-<p>If something doesn’t work:</p>
-<ol type="1">
-<li>Take a screenshot of:
-<ul>
-<li>The terminal where you ran <code>docker run</code></li>
-<li>VS Code (notebook, kernel indicator, and any error)</li>
-</ul></li>
-<li>Copy any error messages.</li>
-<li>Send them to your instructor, along with:
-<ul>
-<li>Your operating system (Windows/macOS, version)</li>
-<li>Which command you ran.</li>
-</ul></li>
-</ol>
-<p>Welcome to the course, and happy coding! 🚀</p>
-</section>
-<section id="optional-install-latex-for-pdf-export" class="level2">
-<h2 class="anchored" data-anchor-id="optional-install-latex-for-pdf-export">11. (Optional) Install LaTeX for PDF Export</h2>
+<section id="quarto-extension-for-vs-code" class="level2">
+<h2 class="anchored" data-anchor-id="quarto-extension-for-vs-code">10.2. Quarto extension for VS Code</h2>
+<p>We will also use Quarto to improve the display of the notebooks for the course. In order to do that you should install the Quarto extension for VS Code, using the link below:</p>
 <ul>
 <li><a href="https://marketplace.visualstudio.com/items?itemName=quarto.quarto">Quarto</a></li>
 </ul>
+<p>The setup for this extension is similar to those described in section 2.2 above.</p>
+</section>
+<section id="using-quarto-to-render-notebooks" class="level2">
+<h2 class="anchored" data-anchor-id="using-quarto-to-render-notebooks">10.3. Using Quarto to render notebooks</h2>
+<p>Once you have installed Quarto and the Quarto extension for VS Code, you can use it to render Jupyter notebooks to various formats (HTML, PDF, etc.). To do this, open a Jupyter notebook in VS Code, then click on the <strong>Quarto Render</strong> button in the top-right corner of the notebook editor panel. Select the desired output format and follow the prompts to render the notebook.</p>
+<p>Alternatively, you can render notebooks from the command line using Quarto. Open a terminal in VS Code, (click on Terminal → New Terminal) navigate to the folder containing the notebook, and run:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render your_notebook.ipynb <span class="at">--to</span> html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Change <code>html</code> to <code>pdf</code> or other formats as desired. The rendered file will be saved in the same folder as the original notebook. If you run into any issues, please let your instructor know.</p>
 </section>
 </section>
 

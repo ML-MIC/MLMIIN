@@ -258,6 +258,37 @@ VS Code has built-in support for git that is very convenient if you already have
 The first time you use git in VS Code, it may ask you to login to your GitHub account. Follow the instructions to authenticate.
 
 
+## 3.6. The .gitignore file and excluded folders
+
+Your fork of the course repository includes a `.gitignore` file that excludes certain folders and files from being tracked by git. This is important to avoid committing large files (such as large datasets)
+or temporary files that are not relevant to the course. 
+
+In particular, the `.gitignore` file excludes:
++ A folder called `data` that we will use to store datasets.
++ A folder called `exclude` that you can use to store any files you do not want git to track. For example, you can use a text file in that folder to store sensitive information such as API keys, passwords, etc. that you do not want to commit to your repository.
+
+The files in these folders are still available to your notebooks when you run the Docker container, but they will not be committed to your git repository. This helps keep your repository clean and avoids unnecessary large files.
+
+Of course any file in your *course root* folder but outside your forked repository folder (e.g. `MLMIINfrk`) will also be ignored by git.
+
+Go ahead and create these folders now inside your forked repository folder (e.g. `MLMIINfrk`). Open a terminal (macOS) or PowerShell (Windows), navigate to your forked repository folder, and run:
+
+```bash
+mkdir data exclude
+```
+
+Now run 
+```bash
+git status
+```
+
+and verify that these folders do not appear in the list of untracked files. If you have followed these instructions up to this point, git should answer 
+```bash
+On branch main
+nothing to commit, working tree clean
+```
+
+
 # 4. Get the Course Files
 
 ## 4.1 Fork the course repository
@@ -501,7 +532,20 @@ git pull upstream main
 And wait for the operation to complete. 
 
 :::{.callout-warning}
-If you have made changes in files that have also been modified in the upstream repository, you may see **merge conflicts**. In that case, contact your instructor for help. Also see below some tips to minimize the chances of conflicts.
+
++ If you have made changes in files that have also been modified in the upstream repository, you may see **merge conflicts**. In that case, contact your instructor for help. Also see below some tips to minimize the chances of conflicts.
+
+:::
+
+
+:::{.callout-warning}
+
++ If you get an error about the `upstream` remote not existing, it means you have not yet added it. In that case, you can ask your instructor for help. But essentially, you need to open a terminal window and run:
+
+```bash
+git remote add upstream https://github.com/ML-MIC/MLMIIN.git
+```
+
 :::
 
 
@@ -511,7 +555,7 @@ If you have made changes in files that have also been modified in the upstream r
    
 First you will need to add the *upstream* remote. **But you only need to do this once!** Start by clicking on the **Source Control** icon in the left sidebar. It looks like this
 
-<img src="./fig/VSCodeVersionControlIcon.png" width=10%/>
+<img src="./fig/VSCodeVersionControlIcon.png" width=7%/>
 
 Then click on the three dots next to *Changes* and select *Remote → Add Remote...* as illustrated below:
 
@@ -532,120 +576,91 @@ and press Enter. When prompted for the remote name, enter `upstream` and press E
 
 #### 8.2.2.2 Pull from upstream (every session)
 
-At the beginning of each session you will need to pull the latest changes from upstream. To do so, click again on the *Source Control* icon in the left sidebar. Then click on the three dots next to *Changes* and select *Remote → Pull from* as illustrated below:
+At the beginning of each session you will need to pull the latest changes from upstream. To do so, 
+click on Terminal → New Terminal to open a terminal window in VS Code. 
 
-<img src="./fig/VSCodePullUpstream01.png" width=90%/>
+<!-- <img src="./fig/VSCodePullUpstream01.png" width=90%/> -->
 
-In the text field at the top, select `upstream` as shown below:
-
-<img src="./fig/VSCodePullUpstream02.png" width=90%/>
-
-and wait for the operation to complete. You will see a text field at the top left with 'Commit' under it.
-
-<img src="./fig/VSCodePullUpstream03.png" width=90%/>
-
-Enter `Pulled latest changes from upstream` (or a similar, possibly more informative one) and click on the check mark icon to commit the changes to your fork. VS Code will warn you that you have not explicitly added any changes, but you can trust it to manage that for you.
-
-<<img src="./fig/VSCodePullUpstream04.png" width=90%/>
-
-Then a new text field will appear at the top asking you to *Sync Changes*. Click on it to push the changes to your fork on GitHub, and also click Ok when VS Code ask for confirmation.
-
-<<img src="./fig/VSCodePullUpstream05.png" width=90%/>
-
-
----
-
-## 9. Troubleshooting
-
-### 9.1. “docker: permission denied” (Linux only)
-
-If you’re on Linux and see a **permission denied** error when running Docker:
-
-1. Add your user to the `docker` group:
-
-   ```bash
-   sudo usermod -aG docker $USER
-   ```
-
-2. Log out and log back in, or reboot.
-3. Try again.
-
-(Windows/macOS users normally do **not** see this issue.)
-
----
-
-### 9.2. Browser/VS Code cannot connect to `http://localhost:8888`
-
-Check:
-
-1. Is the container running?  
-   Look at the terminal where you ran `docker run`. Jupyter logs should be visible.
-2. Did you map the port?  
-   Make sure you used `-p 8888:8888`.
-3. Is Docker Desktop running?  
-   On Windows/macOS, Docker Desktop must be open and running.
-
-You can also run:
-
+When the terminal opens in the bottom panel, make sure that you are located in the `MLMIINfrk` folder (it should appear in the prompt). Then type the following command and hot *Enter*.
 ```bash
-docker ps
+git pull upstream main
+```
+Wait for the operation to complete. 
+
+:::{.callout-warning}
+If you have made changes in files that have also been modified in the upstream repository, you may see **merge conflicts**. In that case, contact your instructor for help. Also see below some tips to minimize the chances of conflicts.
+:::
+
+
+## 8.3. Some tips about  merge conflicts
+
+:::{.callout-important}
+
+##### Again: Always make your own copy of the course notebooks!
+
+We said it before, but this is really the best way to avoid merge conflicts: **make a copy of the course notebooks** to avoid modifying the original files.
+
+:::
+
+
+
+
+
+# 9. Install LaTeX for PDF Export
+
+## 9.1. MacOS
+
+We will use LaTeX to export notebooks to PDF. You need to install it on your host machine (outside the Docker container).
+
+Install LaTeX from [https://www.tug.org/mactex/](https://www.tug.org/mactex/). 
+We recommend installing BasicTeX (smaller download) unless you plan to use LaTeX heavily outside this course. See the figure of the MacTex website below for reference
+
+<<img src="./fig/MacTexWebsite.png" width=90%/> 
+
+
+If you are comfortable with the command line, you can also install it using Homebrew:
+```bash
+brew install --cask basictex
 ```
 
-to see if the container is listed.
+## 9.2. Windows
 
----
+Install MiKTeX from [https://miktex.org/download](https://miktex.org/download). See the figure of the MikTex website below for reference
 
-### 9.3. VS Code “No Jupyter server running”
+<<img src="./fig/MikTexWebsite.png" width=90%/> 
 
-- Make sure the Docker container is running and Jupyter has started.
-- Try `Jupyter: Select Jupyter Server` again and enter `http://localhost:8888`.
-- Ensure the **Jupyter extension** is installed and enabled.
-- Make sure you **trusted the workspace**.
+# 10. Install Quarto & Quarto Extension for VS Code
 
----
-
-### 9.4. ImportError / ModuleNotFoundError
-
-If you see an error like:
-
-```text
-ModuleNotFoundError: No module named 'XYZ'
-```
-
-It usually means:
-
-- You are not using the correct kernel (not the one inside the Docker env), or
-- The course helper `.py` file is not located in the course folder mounted into `/wd`.
-
-Check:
-
-1. In the notebook, run:
-   ```python
-   import sys
-   print(sys.executable)
-   ```
-   If it does **not** point to `/opt/conda/envs/...` inside the container, you are using the wrong kernel.
-2. Make sure all `.py` helper files given by the instructor are present in the **course root** (or the correct subfolder).
-
----
-
-## 10. Getting Help
-
-If something doesn’t work:
-
-1. Take a screenshot of:
-   - The terminal where you ran `docker run`
-   - VS Code (notebook, kernel indicator, and any error)
-2. Copy any error messages.
-3. Send them to your instructor, along with:
-   - Your operating system (Windows/macOS, version)
-   - Which command you ran.
-
-Welcome to the course, and happy coding! 🚀
+## 10.1. About Quarto and setup
 
 
+Quarto is a scientific and technical publishing system built on Pandoc. It is used to create documents, presentations, websites, and more, using plain text files with simple formatting syntax. And it offers an (arguably superior) alternative to Jupyter notebooks for creating documents that combine code, text, and visualizations:
 
-## 11. (Optional) Install LaTeX for PDF Export
++ Being plain-text based, it works well with git version control systems (opposite to Jupyter notebooks, which are JSON files that do not work well with git, to say the least). 
++ Quarto documents can be very easily converted to multiple output formats (HTML, PDF, Word, etc.) from the same source file. Jupyter notebooks are more limited in this regard.
++ Quarto documents can combine different programming languages (Python, R, Julia, C++, etc.) **in the same document**, while Jupyter notebooks are limited to a single kernel/language per notebook.
+
+Despite this praise of Quarto documents, we acknowledge that Jupyter notebooks are very popular in the data science and machine learning community, and they have become the current *de facto* standard for interactive coding. Therefore, we will focus on Jupyter notebooks in this course. However, if you are interested in learning about Quarto, let us know, and we can provide additional resources and guidance.
+
+You can install Quarto from [https://quarto.org/docs/get-started/](https://quarto.org/docs/get-started/). 
+
+## 10.2. Quarto extension for VS Code  
+
+We will also use Quarto to improve the display of the notebooks for the course. In order to do that you should install the Quarto extension for VS Code, using the link below:
 
 - [Quarto](https://marketplace.visualstudio.com/items?itemName=quarto.quarto)
 
+The setup for this extension is similar to those described in section 2.2 above.
+
+## 10.3. Using Quarto to render notebooks
+
+Once you have installed Quarto and the Quarto extension for VS Code, you can use it to render Jupyter notebooks to various formats (HTML, PDF, etc.). To do this, open a Jupyter notebook in VS Code, then click on the **Quarto Render** button in the top-right corner of the notebook editor panel. Select the desired output format and follow the prompts to render the notebook.
+
+Alternatively, you can render notebooks from the command line using Quarto. Open a terminal in VS Code,
+(click on Terminal → New Terminal) navigate to the folder containing the notebook, and run:
+
+```bash
+quarto render your_notebook.ipynb --to html
+```
+
+Change `html` to `pdf` or other formats as desired. The rendered file will be saved in the same folder as the original notebook. If you run into any issues, please let your instructor know.
