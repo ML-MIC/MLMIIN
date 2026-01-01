@@ -591,7 +591,7 @@ Always update your fork before starting the session
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Make a <code>git pull</code> from the <code>upstream</code> repository to get the latest course files. Instructions follow.</p>
+<p>Make a <code>git pull</code> from the <code>origin</code> and <code>upstream</code> repositories to get the latest course files and keep in sync with your GitHub repo. Instructions follow.</p>
 </div>
 </div>
 <p>In your case the upstream repository is the original course repository at</p>
@@ -602,8 +602,12 @@ Always update your fork before starting the session
 <p>In <em>GitHub Desktop</em>, make sure that your fork is selected as <em>Current Repository</em>.</p>
 <p><img src="./fig/GitHubDesktopCurrentRepo.png" width="50%/"></p>
 <p>Then click on <em>Repository → Open in Terminal</em> and wait for the terminal window to open. When it does, type</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull upstream main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>And wait for the operation to complete.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull origin main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>and press <em>Enter</em>. Wait for the operation to complete. Then</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> merge upstream/main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And wait for the operation to complete. Finally, type</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push origin main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>and press <em>Enter</em>. Wait for the operation to complete.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -632,7 +636,7 @@ Warning
 <ul>
 <li>If you get an error about the <code>upstream</code> remote not existing, it means you have not yet added it. In that case, you can ask your instructor for help. But essentially, you need to open a terminal window and run:</li>
 </ul>
-<div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add upstream https://github.com/ML-MIC/MLMIIN.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add upstream https://github.com/ML-MIC/MLMIIN.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -651,13 +655,17 @@ Warning
 <p>and press Enter. When prompted for the remote name, enter <code>upstream</code> and press Enter again.</p>
 <p><img src="./fig/VSCodeAddRemote03.png" width="90%/"></p>
 </section>
-<section id="pull-from-upstream-every-session" class="level4">
-<h4 class="anchored" data-anchor-id="pull-from-upstream-every-session">8.2.2.2 Pull from upstream (every session)</h4>
+<section id="sync-with-the-upstream-repo-every-session" class="level4">
+<h4 class="anchored" data-anchor-id="sync-with-the-upstream-repo-every-session">8.2.2.2 Sync with the upstream repo (every session)</h4>
 <p>At the beginning of each session you will need to pull the latest changes from upstream. To do so, click on Terminal → New Terminal to open a terminal window in VS Code.</p>
 <!-- <img src="./fig/VSCodePullUpstream01.png" width=90%/> -->
-<p>When the terminal opens in the bottom panel, make sure that you are located in the <code>MLMIINfrk</code> folder (it should appear in the prompt). Then type the following command and hot <em>Enter</em>.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull upstream main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Wait for the operation to complete.</p>
+<p>When the terminal opens in the bottom panel, make sure that you are located in the <code>MLMIINfrk</code> folder (it should appear in the prompt). Then type</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull origin main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>and press <em>Enter</em>. Wait for the operation to complete. Then</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> rebase upstream/main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And wait for the operation to complete. Finally, type</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push origin main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>and press <em>Enter</em>. Wait for the operation to complete.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -699,7 +707,7 @@ Again: Always make your own copy of the course notebooks!
 <p>Install LaTeX from <a href="https://www.tug.org/mactex/">https://www.tug.org/mactex/</a>. We recommend installing BasicTeX (smaller download) unless you plan to use LaTeX heavily outside this course. See the figure of the MacTex website below for reference</p>
 <p>&lt;<img src="./fig/MacTexWebsite.png" width="90%/"></p>
 <p>If you are comfortable with the command line, you can also install it using Homebrew:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install <span class="at">--cask</span> basictex</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install <span class="at">--cask</span> basictex</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="windows-1" class="level2">
 <h2 class="anchored" data-anchor-id="windows-1">9.2. Windows</h2>
@@ -732,7 +740,7 @@ Again: Always make your own copy of the course notebooks!
 <h2 class="anchored" data-anchor-id="using-quarto-to-render-notebooks">10.3. Using Quarto to render notebooks</h2>
 <p>Once you have installed Quarto and the Quarto extension for VS Code, you can use it to render Jupyter notebooks to various formats (HTML, PDF, etc.). To do this, open a Jupyter notebook in VS Code, then click on the <strong>Quarto Render</strong> button in the top-right corner of the notebook editor panel. Select the desired output format and follow the prompts to render the notebook.</p>
 <p>Alternatively, you can render notebooks from the command line using Quarto. Open a terminal in VS Code, (click on Terminal → New Terminal) navigate to the folder containing the notebook, and run:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render your_notebook.ipynb <span class="at">--to</span> html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render your_notebook.ipynb <span class="at">--to</span> html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Change <code>html</code> to <code>pdf</code> or other formats as desired. The rendered file will be saved in the same folder as the original notebook. If you run into any issues, please let your instructor know.</p>
 </section>
 </section>

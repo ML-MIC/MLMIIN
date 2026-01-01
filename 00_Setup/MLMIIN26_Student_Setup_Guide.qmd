@@ -511,7 +511,7 @@ For *every course session*, you will usually repeat these steps. Your instructir
 
 ##### Always update your fork before starting the session
 
-Make a `git pull` from the `upstream` repository to get the latest course files. Instructions follow.
+Make a `git pull` from the `origin` and `upstream` repositories to get the latest course files and keep in sync with your GitHub repo. Instructions follow.
 :::
 
 In your case the upstream repository is the original course repository at   
@@ -526,12 +526,20 @@ In *GitHub Desktop*, make sure that your fork is selected as *Current Repository
 
 <img src="./fig/GitHubDesktopCurrentRepo.png" width=50%/>
 
-
 Then click on *Repository → Open in Terminal* and wait for the terminal window to open. When it does, type 
 ```bash
-git pull upstream main
+git pull origin main
 ```
-And wait for the operation to complete. 
+and press *Enter*. Wait for the operation to complete. Then 
+
+```bash
+git merge upstream/main
+```
+And wait for the operation to complete. Finally, type 
+```bash
+git push origin main
+```
+and press *Enter*. Wait for the operation to complete. 
 
 :::{.callout-warning}
 
@@ -576,18 +584,29 @@ and press Enter. When prompted for the remote name, enter `upstream` and press E
 <img src="./fig/VSCodeAddRemote03.png" width=90%/>
 
 
-#### 8.2.2.2 Pull from upstream (every session)
+#### 8.2.2.2 Sync with the upstream repo  (every session)
 
 At the beginning of each session you will need to pull the latest changes from upstream. To do so, 
 click on Terminal → New Terminal to open a terminal window in VS Code. 
 
 <!-- <img src="./fig/VSCodePullUpstream01.png" width=90%/> -->
 
-When the terminal opens in the bottom panel, make sure that you are located in the `MLMIINfrk` folder (it should appear in the prompt). Then type the following command and hot *Enter*.
+When the terminal opens in the bottom panel, make sure that you are located in the `MLMIINfrk` folder (it should appear in the prompt). Then type
+
 ```bash
-git pull upstream main
+git pull origin main
 ```
-Wait for the operation to complete. 
+and press *Enter*. Wait for the operation to complete. Then 
+
+```bash
+git rebase upstream/main
+```
+And wait for the operation to complete. Finally, type 
+```bash
+git push origin main
+```
+and press *Enter*. Wait for the operation to complete. 
+
 
 :::{.callout-warning}
 If you have made changes in files that have also been modified in the upstream repository, you may see **merge conflicts**. In that case, contact your instructor for help. Also see below some tips to minimize the chances of conflicts.
