@@ -233,9 +233,14 @@ git --version
 
 ## 3.3 Create a GitHub account
 
-If you haven't already, we <span style="color:red; display:inline;font-weight:bold;">require</span>  **that you create a free GitHub account, linked to your university email**. You can do this by going to [https://github.com/signup](https://github.com/signup) and following the instructions. You do not need to provide payment information for the free account!
++ If you haven't already, we <span style="color:red; display:inline;font-weight:bold;">require</span>  **that you create a free GitHub account, linked to your university email**. You can do this by going to [https://github.com/signup](https://github.com/signup) and following the instructions. You do not need to provide payment information for the free account!
 
 <img src="./fig/GitHubSignup.png" width=90%/>
+
++ Send your GitHub username to your instructor ASAP once you have created the account.
+
+
++ **Optional but strongly recommended:** after creating your GitHub account, apply for a **student developer pack** at [https://education.github.com/pack](https://education.github.com/pack). It gives you access to many free tools and services for students, including among others Copilot, GitHub Codespaces, and more.
 
 ## 3.4. Install GitHub Desktop (optional)
 
@@ -243,7 +248,6 @@ If you prefer a graphical interface to manage git repositories, you can install 
 [https://desktop.github.com/download/](https://desktop.github.com/download/) and download the version for your OS. Run the installer and follow the instructions.
 
 
-**Optional but strongly recommended:** after creating your GitHub account, apply for a **student developer pack** at [https://education.github.com/pack](https://education.github.com/pack). It gives you access to many free tools and services for students, including among others Copilot, GitHub Codespaces, and more.
 
 
 ### 3.4.1 Configure GitHub Desktop
