@@ -32,7 +32,7 @@ In this course you will run Python code **inside a Docker container**, and conne
 
 ##### Important Notice
 
-Make sure you read these notes at least once before starting the setup process. We will be going over this setup instructions in the course first session. So the goal of reading this document now is to familiarize yourself with the steps involved. **If you are certain** that you can proceed on your own, you can start the setup right away. But if you have any questions or concerns, please wait until the first session where we will go through the setup together and help you with any issues.
+Make sure you read these notes at least once before starting the setup process. We will be going over this setup instructions in the course first session. So the goal of reading this document now is to familiarize yourself with the steps involved. **If you are certain** that you can proceed on your own (familiarity with Git and Docker is required), you can start the setup right away. But if you have any questions or concerns, please wait until the first session where we will go through the setup together and help you with any issues.
 :::
 
 <!--0. Prerequisites
@@ -235,9 +235,9 @@ git --version
 
 + If you haven't already, we <span style="color:red; display:inline;font-weight:bold;">require</span>  **that you create a free GitHub account, linked to your university email**. You can do this by going to [https://github.com/signup](https://github.com/signup) and following the instructions. You do not need to provide payment information for the free account!
 
-<img src="./fig/GitHubSignup.png" width=90%/>
+<img src="./fig/GitHubSignup.png" width=70%/>
 
-+ Send your GitHub username to your instructor ASAP once you have created the account.
++ <span style="color:red; display:inline;font-weight:bold;">Send your GitHub username to your instructor ASAP</span> once you have created the account.
 
 
 + **Optional but strongly recommended:** after creating your GitHub account, apply for a **student developer pack** at [https://education.github.com/pack](https://education.github.com/pack). It gives you access to many free tools and services for students, including among others Copilot, GitHub Codespaces, and more.
@@ -262,138 +262,50 @@ VS Code has built-in support for git that is very convenient if you already have
 The first time you use git in VS Code, it may ask you to login to your GitHub account. Follow the instructions to authenticate.
 
 
-## 3.6. The .gitignore file and excluded folders
 
-Your fork of the course repository includes a `.gitignore` file that excludes certain folders and files from being tracked by git. This is important to avoid committing large files (such as large datasets)
-or temporary files that are not relevant to the course. 
 
-In particular, the `.gitignore` file excludes:
-+ A folder called `data` that we will use to store datasets.
-+ A folder called `exclude` that you can use to store any files you do not want git to track. For example, you can use a text file in that folder to store sensitive information such as API keys, passwords, etc. that you do not want to commit to your repository.
+# 4. Get the Course Setup Files
 
-The files in these folders are still available to your notebooks when you run the Docker container, but they will not be committed to your git repository. This helps keep your repository clean and avoids unnecessary large files.
+## 4.1 Clone the course repository
 
-Of course any file in your *course root* folder but outside your forked repository folder (e.g. `MLMIINfrk`) will also be ignored by git.
-
-Go ahead and create these folders now inside your forked repository folder (e.g. `MLMIINfrk`). Open a terminal (macOS) or PowerShell (Windows), navigate to your forked repository folder, and run:
+This step depends on the tool you are using: **GitHub Desktop**, **VS Code**, or **git command line**. In either case you will need the course repository URL which is:
 
 ```bash
-mkdir data exclude
+https://github.com/ML-MIC/MLMIIN
 ```
-
-Now run 
-```bash
-git status
-```
-
-and verify that these folders do not appear in the list of untracked files. If you have followed these instructions up to this point, git should answer 
-```bash
-On branch main
-Your branch is up to date with 'origin/main'.
-
-nothing to commit, working tree clean
-```
-
-
-# 4. Get the Course Files
-
-## 4.1 Fork the course repository
-
-Login to GitHub on your web browser. Go to [https://github.com/ML-MIC/MLMIIN](https://github.com/ML-MIC/MLMIIN) and click on the fork icon (top-right) to create your own copy of the repository.
-
-<img src="./fig/GitHubForkMLMIIN.png" width=90%/>
-
-We strongly suggest using `MLMIINfrk` as the name of your fork, so that it is easy to identify. Wait until the fork is completed and the web page for the forked repository is shown.
-
-## 4.2 Clone your fork to your computer
-
-This step depends on the tool you are using: **GitHub Desktop**, **VS Code**, or **git command line**. In either case you will start by clicking the green **Code** button on your forked repository page, and copying the URL shown (make sure **HTTPS** is selected) as in the picture below:
-
-<img src="./fig/GitHubCloneFork01.png" width=90%/>
-
-### 4.2.1 Using GitHub Desktop
+### 4.1.1 Using GitHub Desktop
 
 Open *GitHub Desktop* and go to *File → Clone Repository...*. See the figure for the window that opens:
 
-<img src="./fig/GitHubCloneFork02.png" width=70% align="center"/>
+<img src="./fig/GitHubClone01.png" width=70% align="center"/>
 
-Make sure GitHub is selected and enter the name of the fork you created before (that is *MLMIINfrk* if you followed our advice). **Choose your course root** as local path where to clone the repository (this will be your  folder). Finally click on **Clone**.
+Make sure URL tab is selected. Paste the course repository URL above in the *Repository URL* field. Also make sure that the *Local Path* field points to your *course root* folder (see section 0.2 above). Finally click on *Clone*.
 
-:::{.callout-important}
-In the next step make sure that you select *To contribute to the parent project* as illustrated below:
-:::
+### 4.1.2 Using VS Code
 
-<img src="./fig/GitHubCloneFork03.png" width=70%/>
+Open *VS Code*. Press `Ctrl+Shift+P` (Windows) or `Cmd+Shift+P` (macOS) to open the command palette. Type `Git: Clone` and select it.
 
+<img src="./fig/GitHubClone02.png" width=70% align="center"/>
 
-### 4.2.2 Using VS Code
+Next, paste **the URL of the course repo** and press Enter.
 
-Open *VS Code*. Press `Ctrl+Shift+P` (Windows) or `Cmd+Shift+P` (macOS) to open the command palette. Type `Git: Clone` and select it. 
+<img src="./fig/GitHubClone03.png" width=70% align="center"/>
 
-<img src="./fig/GitHubCloneFork04.png" width=90%/>
+When prompted, **choose your course root** as the local *repository destination* (the repository will be cloned as a subfolder of your course root folder). Wait until the cloning is completed. You can then open the folder in VS Code (and answer Yes about trusting the authors).
 
-Next, paste **the URL of the forked repo** you copied before and press Enter.
+### 4.1.3 Using git command line
 
-**Make sure that you use the forked repo and not the original one!** The URL should contain your GitHub username.
-
-<img src="./fig/GitHubCloneFork05.png" width=90%/>
-
-When prompted, **choose your course root** as the local *repository destination* (the repository will be clones as a subfolder of your course root folder). Wait until the cloning is completed. You can then open the folder in VS Code (and answer Yes about trusting the authors).
-
-
-# 5. Build the Course Docker Image
-
-Depending on your OS and hardware architecture, this can be a long process (expect up to 20–40 minutes). But you only need to **build the image once** (unless the course Dockerfile changes).
-
-## 5.1. MacOS
-
-1. Open *Terminal*.
-2. Use `cd` to navigate to the subfolder in your forked repository folder that contains the Dockerfile for the image; a typical example is:
+Open a terminal (macOS) or PowerShell (Windows). Use `cd` to navigate to your **course root** folder (see section 0.2 above). Then run:  
 
 ```bash
-cd ~/MIIN/ML/MLMIINfrk/00_Setup
+git clone   https://github.com/ML-MIC/MLMIIN
 ```
+This will create a subfolder called `MLMIIN` inside your course root folder, containing the course files. Wait until the cloning is completed.
 
-Here `~` stands for your home folder, and so `~/MIIN/ML` is the course root folder.
 
-3. Build the image by running:
+# 5. Get and Run the Course Docker Image
 
-```bash
-docker image build --file Dockerfile_mac --tag mlmiin:latest .
-```
-
-This can take a while the first time (it creates the conda environment and installs all required libraries). When it finishes, you can confirm the image exists:
-
-```bash
-docker images
-```
-
-You should see something like `mlmiin   latest` in the list.
-
-## 5.2. Windows
-
-1. Open *PowerShell*.
-2. Use `cd` to navigate to the subfolder in your forked repository folder that contains the Dockerfile for the image; a typical example is:
-
-```bash
-cd C:\Users\<yourname>\MIIN\ML\MLMIINfrk\00_Setup
-```
-
-3. Build the image:
-
-```bash
-docker image build --file Dockerfile_x86 --tag mlmiin:latest .
-```
-
-Check it with:
-
-```bash
-docker images
-```
-
-You should see `mlmiin` listed.
-
-# 6. Run the Docker Container
+<!-- Depending on your OS and hardware architecture, this can be a long process (expect up to 20–40 minutes). But you only need to **build the image once** (unless the course Dockerfile changes). -->
 
 :::{.callout-important}
 
@@ -405,12 +317,24 @@ Additionally, this keeps the container isolated from other folders on your compu
 
 :::
 
-## 6.1. Command to run the container
+
+## 5.1. Get the course Docker image from Docker Hub
+
+In *Terminal* for MacOS o or *PowerShell* for Windows, and **from your course root folder**, run the following command to download the pre-built Docker image for the course from Docker Hub:
+
+```bash
+docker pull fsansegundo/mlmiin:latest
+```
+
+and wait until the download ends. This is a several gigabytes download, so it may take a while depending on your internet connection speed.
+
+
+## 5.2. Command to run the container
 
 In *Terminal* for MacOS o or *PowerShell* for Windows, and **from your course root folder**, run the following command to start the container and the Jupyter kernel inside it.
 
 ```bash
-docker run -it --rm -p 8888:8888  -v "$PWD":/wd mlmiin:latest
+docker run -it --rm -p 8888:8888 -v "$PWD":/wd fsansegundo/mlmiin:2026V01
 ```
 
 In the terminal, you should see Jupyter starting and eventually a line like:
@@ -432,21 +356,18 @@ http://localhost:8888
 :::
 
 
-# 7. Connect from VS Code to the Jupyter Kernel in Docker
+# 6. Connect from VS Code to the Jupyter Kernel in Docker
 
-## 7.1. Open the course folder in VS Code
+## 6.1. Open the course folder in VS Code
 
-If you have followed the steps above, you may have already opened the course folder in VS Code (you can check it by looking at the top of the VS Code window; it should show the folder name, such as `MLMIINfrk`).
-In that case skip to the next section.
-
-If not, do the following:
+Do the following:
 
 1. Start VS Code.
 2. Go to *File → Open Folder...*
-3. Select your course root folder.
+3. Select the MLMIIN subfolder of your course root folder.
 4. VS Code might ask if you trust the folder → click *Yes, I trust the authors*.
 
-## 7.2. Open a notebook
+## 6.2. Open a notebook
 
 In the VS Code *Explorer* panel (the first icon on the left side bar). Navigate to `00_Setup` and open the `1_1_Introduction.ipynb` notebook file (click it). The file may look different in your computer, because of the extensions you have installed, but it should be similar to this:
 
@@ -461,7 +382,7 @@ Before doing anything else, make sure you **make a copy of the notebook** to avo
 :::
 
 
-## 7.3. Select the Jupyter server
+## 6.3. Select the Jupyter server
 
 At the top-right corner of the notebook editor panel, you should see a **Select Kernel** button:
 
@@ -508,6 +429,8 @@ For *every course session*, you will usually repeat these steps. Your instructir
      docker run -it --rm -p 8888:8888 -v "$PWD":/wd mlmiin:latest
      ```
 5. Open *VS Code*, open the *MIIN* folder (it contains your fork MIINfrk as a subfolder).
+
+
 
 ## 8.2 Update course files
 
@@ -627,7 +550,24 @@ We said it before, but this is really the best way to avoid merge conflicts: **m
 
 :::
 
+## Stopping the Jupyter server and Docker container
 
+When you are done working for the day, and **after making sure you have saved your work**,
+go to the terminal where the Docker container is running and press `Ctrl + C` to stop the Jupyter server and the container. When asked to shut down the server, type `y` and press Enter. You should see something like this:
+
+```bash
+^C[I 2026-01-02 18:56:56.756 ServerApp] interrupted
+[I 2026-01-02 18:56:56.757 ServerApp] Serving notebooks from local directory: /wd
+    1 active kernel
+    Jupyter Server 2.17.0 is running at:
+    http://5c3619ce62c9:8888/lab
+        http://127.0.0.1:8888/lab
+Shut down this Jupyter server (y/[n])? y
+[C 2026-01-02 18:56:59.126 ServerApp] Shutdown confirmed
+[I 2026-01-02 18:56:59.128 ServerApp] Shutting down 5 extensions
+[I 2026-01-02 18:56:59.128 ServerApp] Shutting down 1 kernel
+[I 2026-01-02 18:56:59.129 ServerApp] Kernel shutdown: 8c717ef9-be70-44b2-b699-79bdad607a07
+```
 
 
 
@@ -689,3 +629,42 @@ quarto render your_notebook.ipynb --to html
 ```
 
 Change `html` to `pdf` or other formats as desired. The rendered file will be saved in the same folder as the original notebook. If you run into any issues, please let your instructor know.
+
+
+# Pending Issues / FAQ
+
+## 3.6. The .gitignore file and excluded folders
+
+Your fork of the course repository includes a `.gitignore` file that excludes certain folders and files from being tracked by git. This is important to avoid committing large files (such as large datasets)
+or temporary files that are not relevant to the course. 
+
+In particular, the `.gitignore` file excludes:
++ A folder called `data` that we will use to store datasets.
++ A folder called `exclude` that you can use to store any files you do not want git to track. For example, you can use a text file in that folder to store sensitive information such as API keys, passwords, etc. that you do not want to commit to your repository.
+
+The files in these folders are still available to your notebooks when you run the Docker container, but they will not be committed to your git repository. This helps keep your repository clean and avoids unnecessary large files.
+
+Of course any file in your *course root* folder but outside your forked repository folder (e.g. `MLMIINfrk`) will also be ignored by git.
+
+Go ahead and create these folders now inside your forked repository folder (e.g. `MLMIINfrk`). Open a terminal (macOS) or PowerShell (Windows), navigate to your forked repository folder, and run:
+
+```bash
+mkdir data exclude
+```
+
+Now run 
+```bash
+git status
+```
+
+and verify that these folders do not appear in the list of untracked files. If you have followed these instructions up to this point, git should answer 
+```bash
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+```
+
+
+
+
