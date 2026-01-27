@@ -93,6 +93,6 @@ rsconnect/
 *.sublime-workspace
 
 
-
+*local.*
 *local.ipynb
 
