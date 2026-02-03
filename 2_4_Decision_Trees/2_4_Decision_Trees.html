@@ -1,0 +1,2516 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="F.San Segundo &amp; N.Rodríguez ">
+
+<title>Chapter 2, Part 4: Decision Trees</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="2_4_Decision_Trees_files/libs/clipboard/clipboard.min.js"></script>
+<script src="2_4_Decision_Trees_files/libs/quarto-html/quarto.js"></script>
+<script src="2_4_Decision_Trees_files/libs/quarto-html/popper.min.js"></script>
+<script src="2_4_Decision_Trees_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="2_4_Decision_Trees_files/libs/quarto-html/anchor.min.js"></script>
+<link href="2_4_Decision_Trees_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="2_4_Decision_Trees_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="2_4_Decision_Trees_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="2_4_Decision_Trees_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="2_4_Decision_Trees_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#decision-trees.-introduction" id="toc-decision-trees.-introduction" class="nav-link active" data-scroll-target="#decision-trees.-introduction">Decision Trees. Introduction</a></li>
+  <li><a href="#decision-trees-in-scikit-learn" id="toc-decision-trees-in-scikit-learn" class="nav-link" data-scroll-target="#decision-trees-in-scikit-learn">Decision Trees in scikit-learn</a></li>
+  <li><a href="#model-performance-evaluation" id="toc-model-performance-evaluation" class="nav-link" data-scroll-target="#model-performance-evaluation">Model Performance Evaluation</a></li>
+  <li><a href="#model-comparison-and-non-linear-terms-in-logistic-regression-models" id="toc-model-comparison-and-non-linear-terms-in-logistic-regression-models" class="nav-link" data-scroll-target="#model-comparison-and-non-linear-terms-in-logistic-regression-models">Model Comparison and Non Linear Terms in Logistic Regression Models</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Chapter 2, Part 4: Decision Trees</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+<p class="subtitle lead">Machine Learning</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">F.San Segundo &amp; N.Rodríguez  </p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+             Based on notes by Professors A.Muñoz, J.Portela &amp; J.Pizarroso
+          </p>
+      </div>
+    </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="decision-trees.-introduction" class="level1">
+<h1>Decision Trees. Introduction</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Playing the 20 Questions Game
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="https://en.wikipedia.org/wiki/Twenty_questions">The 20 Questions Game</a> is, according to the Wikipedia, a game in which one player the <em>“answerer”</em> chooses something that the other players, the <em>“questioners”</em>, must guess. They do that in turns, asking a question which the answerer must answer with “yes” or “no”. And they have a total number of twenty questions to find the answer.</p>
+<p>As a birdwatcher, my something is bound to be a bird that I saw once. There are about 11000 species of birds in the world, so you have to think carefully what the relevant questions are for such a classification problem. Those should be the input variables for any <em>bird classifier</em> algorithm. This website illustrates the <a href="https://merlin.allaboutbirds.org/"><em>state of the art</em> in Machine Learning applied to bird identification</a>.</p>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./fig/2_4_MisteryBird.JPG" class="img-fluid figure-img" style="width:80.0%" alt="Can you guess the bird in  20 questions?"></p>
+</figure>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Selecting Features and Asking Questions
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The decision tree classifier algorithm proceeds in a similar way: given a dataset of well chosen, relevant input variables, <strong>we sequentially ask yes/no questions</strong>. At some point in the identification process we can ask questions like: <em>Is the wingspan less than 50cm?</em> Or: <em>Is the color of the beak red?</em> Note that the variables involved in these questions can be either numeric of categorical. In the first case our questions will be about inequalities like <span class="math inline">\(X_i &lt; a\)</span>. In the second we ask if the factor takes one of its possible values.</p>
+</div>
+</div>
+<p>Biologists in particular have been thinking like this for a long time while doing Taxonomy. In your <code>fig</code> folder you will find the biologist version of <em>Twenty Questions</em> for the birds of the world, in the file <a href="./fig/Kimball_2019_OW_supertree_poster.png">Kimball_2019_OW_supertree_poster.png</a>. And below you can see a <a href="">Decision Tree applied to the classical <em>Iris dataset</em> (from the scikit-learn website)</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://miro.medium.com/v2/resize:fit:720/format:png/1*H6thrs5CR_wdxQyMCwWawQ.png" class="img-fluid figure-img" style="width:60.0%" alt="A decision tree classifier for the Iris dada set"></p>
+</figure>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Preliminary Ideas about the Decision Tree Algorithm
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We will use the following diagram to illustrate the foundations of the Decision Tree algorithm.</p>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./fig/2_4_Decision_Tree_01.png" class="img-fluid figure-img" style="width:100.0%" alt="Decision Tree Algorithm Preliminary"></p>
+</figure>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Defining Purity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To make the decision tree algorithm work we need a <strong>precise definition of purity.</strong> That is, given a set of samples with a proportion p of them having <code>Y = 1</code> (and 1 - p having <code>Y = 0</code>) we need to define the number <span class="math display">\[
+\text{Purity(p)}
+\]</span> This number should be <strong>a measure of how hard it is to predict the class of a sample chosen at random</strong> from that set. Note that purity is symmetric, meaning that we should have <span class="math display">\[\text{Purity(p)} = \text{Purity(1 - p)}\]</span> Besides, the maximum value of purity should be for <span class="math inline">\(p = 1/2\)</span> and the minimal should be for <span class="math inline">\(p = 0\)</span> and <span class="math inline">\(p = 1\)</span>.</p>
+<p><span class="math inline">\(\quad\)</span></p>
+<p>There are many mathematical definitions that verify these requirements, essentially any function with this shape:</p>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./fig/2_4_PurityFunction.png" class="img-fluid figure-img" style="width:60.0%" alt="Purity Function"></p>
+</figure>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Gini and Entropy Definitions of Purity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Two of the most frquently used measures of purity are <strong>Gini index</strong>: <span class="math display">\[G(p) = 2 p (1 - p)\]</span> and <strong>entropy</strong> defined as: <span class="math display">\[E(p) = -(p\log(p) + (1- p)\log(1 - p))\]</span></p>
+<p>The <em>CART decision tree algorithm</em> uses Gini while C4.5 decision trees use entropy and in scikit-learn you can choose between them. Here we will use Gini’s index in the discussion for simplicity in some of the arguments.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Multiclass Problems
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The above discussion and definitions are for the binary classification problem. You can see the extended definitions for multiclass problems in this <a href="https://en.wikipedia.org/wiki/Decision_tree_learning#Gini_impurity">Wikipedia page</a>.</p>
+<p><strong>Pay attention:</strong> these are truly <strong>measures of impurity</strong>. That is, they decrease as purity increases.</p>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Choosing Optimal Splits
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Measuring purity of a set is only a part of what we need to to. In order for the algorithm to be any good we also need to think about the quality of the splits we make. In the previous diagram we clearly made some suboptimal choices when creating the splits.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 001
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you have not already, go back to the first node of the diagram and ask yourself: what is the optimal split here? And what is the worst split? How are you deciding this?</p>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Updating Purity after a Split
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Clearly a split is a good split if it leads to <strong>increased purity of the subnodes (decreased Gini)</strong>. We already know how to compute the purity of the two resulting subnodes, but <strong>how do we combine them into a new global measure of purity?</strong></p>
+<p><span class="math inline">\(\quad\)</span></p>
+<p>A this point we need a better playground to test our ideas. So we turn to Python and back to the <code>Default</code> dataset that we used to start our discussion of Logistic Regression. The following code loads the dataset (assuming the usual course folder structure) and creates the training and test sets (with our usual name conventions) for you. <strong>Check the code!</strong></p>
+</div>
+</div>
+<div class="cell" data-execution_count="129">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard Data Science Imports</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn <span class="im">as</span> sk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="130">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>run <span class="op">-</span>i <span class="st">"2_4_Default_Dataset.py"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %load "2_4_Default_Dataset.py"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 002
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Important:</strong> to properly define splits we need the training set to be sorted along the input variable <code>balance</code>. Do that now. <strong>The code below assumes that the training set is sorted!</strong></p>
+<p>What is the Gini’s purity value for the training set? Why do we get this value?</p>
+</div>
+</div>
+<div class="cell" data-execution_count="131">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>run <span class="op">-</span>i <span class="st">"../exclude/code/2_4_Exercise003.py"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Initial Gini =  0.06249782986111111</code></pre>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Visualize the Set and Think about Splits
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We plot the dataset below with a proposal for a tentative split.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="132">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sns.set_theme(rc<span class="op">=</span>{<span class="st">'figure.figsize'</span>:(<span class="dv">10</span>, <span class="dv">3</span>)})<span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(XTR, x <span class="op">=</span> <span class="st">"balance"</span>, y<span class="op">=</span>YTR, hue<span class="op">=</span>YTR)<span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.axvline(x<span class="op">=</span><span class="dv">2100</span>, ls<span class="op">=</span><span class="st">"--"</span>, c<span class="op">=</span><span class="st">"red"</span>, lw<span class="op">=</span><span class="dv">3</span>) </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.text(x <span class="op">=</span> <span class="dv">2120</span>, y <span class="op">=</span> <span class="fl">0.5</span>, s<span class="op">=</span><span class="st">"Split at 2100?"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="132">
+<pre><code>Text(2120, 0.5, 'Split at 2100?')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2_4_Decision_Trees_files/figure-html/cell-5-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 003
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Do you think this split is good enough at increasing purity (decreasing Gini)?</p>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Analyzing the purity of the subnodes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To get a full picture of the situation we need more information about the subnodes created by a split. The code in the following script defines a Python function called <code>gini_subnodes</code> that returns the gini index for each of the subnodes, and also the number of sample points in each subnode created by the split. The return value of the function is a 4-tuple with these values (gini_left, gini_right, number_left, number_right).</p>
+</div>
+</div>
+<div class="cell" data-execution_count="133">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %load "2_4_gini_subnodes.py"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>run <span class="op">-</span>i <span class="st">"2_4_gini_subnodes.py"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Let us apply the function to the training set with the split at the suggested value 2100. Try some other values.</p>
+<div class="cell" data-execution_count="134">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>gini_l, gini_r, n_l, n_r <span class="op">=</span> gini_subnodes(df <span class="op">=</span> dfTR, var<span class="op">=</span><span class="st">"balance"</span>, split<span class="op">=</span><span class="dv">2100</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>gini_l, gini_r, n_l, n_r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="134">
+<pre><code>(0.05307588891984114, 0.40816326530612246, 953, 7)</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 004
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Try some other values. How would you get a combined measure of purity for both nodes?</p>
+</div>
+</div>
+<div class="cell" data-execution_count="135">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %run -i "../exclude/code/2_4_Exercise004.py"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Updating Gini after the split
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The key idea is that the size of the subnodes matters. A very pure but very small subnode can not have the same influence on the global purity value as a very large but very impure <em>partner</em> subnode. We can not take a simple average of both purities. Instead we will consider a weighted average of the subnode purities, using their sizes as weights.</p>
+<p>The following function does just that and returns the updated global gini index after a split.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="136">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gini_update(df, var, split):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    gini_l, gini_r, n_l, n_r <span class="op">=</span> gini_subnodes(df, var, split)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> n_l <span class="op">+</span> n_r</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    new_gini <span class="op">=</span> (n_l <span class="op">/</span> n) <span class="op">*</span> gini_l <span class="op">+</span> (n_r <span class="op">/</span> n) <span class="op">*</span> gini_r</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>(new_gini)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 005
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use the function to find the purity if we split at 2100. And then use it to try to find a better, in fact a <em>very good split</em>. Can you beat your classmates?</p>
+</div>
+</div>
+<div class="cell" data-execution_count="137">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>gini_update(dfTR, <span class="st">"balance"</span>, <span class="dv">2100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="137">
+<pre><code>0.05566506770599111</code></pre>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Find the Optimal Position of the Split
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Now that we know how to combine the Gini indices of the subnodes, we can take the next step and locate the best possible split. That is, the one that leads to the biggest decrease in the global Gini index (the greatest increase in purity). The way hat a decision tree does this s to consider all possible <strong>split positions</strong>. Those are the midpoints between data points. And then find the associated increases in the global purity. The following code does that.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="138">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>balances <span class="op">=</span> dfTR[<span class="st">"balance"</span>].values</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>midpoints <span class="op">=</span> [(balances[k] <span class="op">+</span> balances[k <span class="op">+</span> <span class="dv">1</span>])<span class="op">/</span><span class="dv">2</span> <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(balances) <span class="op">-</span> <span class="dv">1</span>)]</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>newGinis <span class="op">=</span> np.array([gini_update(dfTR, <span class="st">"balance"</span>, m) <span class="cf">for</span> m <span class="kw">in</span> midpoints])</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The new total minimum Gini is %.5f splitting at (midpoint number %d) = %.1f"</span> <span class="op">%</span> (np.<span class="bu">min</span>(newGinis), </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                                                                                      np.argmin(newGinis), </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                                                                                      midpoints[np.argmin(newGinis)]))</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(x=midpoints, y = newGinis)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>The new total minimum Gini is 0.05009 splitting at (midpoint number 949) = 2037.0</code></pre>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Splits for Factor (Categorical) Inputs
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>As far as the purity measures are concerned, the only relevant thing about a split is that we have a yes/no question that divides the samples in an existing node into two subnodes. For a numeric input the questions are phrased as inequalities, like the ones we used in the previous examples. For a factor, e.g.&nbsp;color, the question could be about one of its levels, like: <em>is the color red?</em> So in this case we can consider a split for each label of the factor.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Decision Trees with Multidimensional Inputs
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What happens if we have a dataset with more than one input variable? Then the method looks for <strong>the best possible split across all variables</strong> and uses that to create the subnodes. Therefore classification trees can deal with an arbitrary number of input variables, at the expense of increased computation time for training.</p>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hyperparameters for Decision Trees
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>With a large dataset, with several numeric and factor inputs, a classification tree can grow to be very deep! Letting classification trees grow freely is similar to considering very low values of k in KNN: you are bound to overfit your model to the training dataset.</p>
+<p>In the preliminary discussion at the beginning of this session the depth of the tree was three but one of the green baskets/nodes was not yet pure. A possible way to fight overfilling is to apply some <strong>early stopping</strong> criterion that prevents some nodes from splitting further once that criterion is met. For example, we can say, if the node Gini is already under 0.01, split this node no more.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feature Selection and Importance in Decision Trees
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Trained decision trees can be used to perform feature selection in a straightforward way: if an input variable is never selected for a split, then the model is telling us that this variable is not relevant for prediction.</p>
+<p>Taking this one step further, <strong>the importance of the variables can be measured by the contribution they make to the splits, weighted by the purity increased of those splits.</strong></p>
+</div>
+</div>
+<hr>
+</section>
+<section id="decision-trees-in-scikit-learn" class="level1">
+<h1>Decision Trees in scikit-learn</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Decision Trees for Classification in scikit-learn
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We are now ready to use scikit-learn to fit a decision tree model, implemented in the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html"><code>DecisionTreeClassifier</code></a> class. Visit the documentation there and in particular look at the <em>parameters</em> section to see the available early stopping criteria. You can find further information in <a href="https://scikit-learn.org/stable/modules/tree.html#">this page of the scikit-learn website</a></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dataset for Model Comparison
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To compare with our results from previous sessions we will use the dataset in <code>SimData0.csv</code>. The script below prepares the dataset, creating training and test sets.</p>
+<p><strong>Important:</strong> previously we removed <code>X3</code> from the dataset because of its high correlation with <code>X1</code>. Now we keep it in the dataset to illustrate variable importance in Decision Trees.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="139">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>run <span class="op">-</span>i  <span class="st">"./2_4_SimData0_dataset.py"</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># XTR</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Preprocessing completed. Train and test set created.</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="140">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>dfTR <span class="op">=</span> XTR.copy()<span class="op">;</span> dfTR[<span class="st">'Y'</span>] <span class="op">=</span> YTR</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>dfTS <span class="op">=</span> XTS.copy()<span class="op">;</span> dfTS[<span class="st">'Y'</span>] <span class="op">=</span> YTS</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<div class="cell" data-execution_count="141">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(dfTR,  x<span class="op">=</span><span class="st">"X1"</span>, y<span class="op">=</span><span class="st">"X2"</span>, hue<span class="op">=</span><span class="st">"Y"</span>)<span class="op">;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>plt.show()<span class="op">;</span>plt.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="2_4_Decision_Trees_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Creating a Pipeline for the Decision Tree
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The preprocessing part of the pipeline should be familiar by now.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="142">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>num_transformer <span class="op">=</span> Pipeline(</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    steps<span class="op">=</span>[(<span class="st">"scaler"</span>, StandardScaler())]</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>preprocessor <span class="op">=</span> ColumnTransformer(</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    transformers<span class="op">=</span>[</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>        (<span class="st">"num"</span>, num_transformer, num_inputs),</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>        (<span class="st">"cat"</span>, <span class="st">"passthrough"</span>, ohe_inputs),</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Early Stopping Based on Maximum Tree Depth
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Now we create a hyperparameter grid that controls the depth of the trained trees, and add the modeling step to the pipeline.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="143">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>hyp_grid <span class="op">=</span> {<span class="st">'Dtree__max_depth'</span>: <span class="bu">range</span>(<span class="dv">2</span>, <span class="dv">10</span>)} </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>DecTree_pipe <span class="op">=</span> Pipeline(steps<span class="op">=</span>[(<span class="st">'preproc'</span>, preprocessor), </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                           (<span class="st">'Dtree'</span>, DecisionTreeClassifier(criterion<span class="op">=</span><span class="st">'gini'</span>, </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                                                     random_state<span class="op">=</span><span class="dv">1</span>))]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Using this Pipeline with Grid Search and Cross-Validation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We use <code>GridSearchCV</code> to search optimal hyperparameter values with 10-fold cross validation.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="144">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>num_folds <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>DecTree_gridCV <span class="op">=</span> GridSearchCV(estimator<span class="op">=</span>DecTree_pipe, </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                        param_grid<span class="op">=</span>hyp_grid, </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>                        cv<span class="op">=</span>num_folds,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>                        return_train_score<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Model Fit
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>And remember to call the <code>fit</code> method on the training data!</p>
+</div>
+</div>
+<div class="cell" data-execution_count="145">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>DecTree_gridCV.fit(XTR, YTR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="145">
+<style>#sk-container-id-4 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-4 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-4 pre {
+  padding: 0;
+}
+
+#sk-container-id-4 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-4 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-4 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-4 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-4 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-4 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-4 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-4 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-4 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-4 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-4 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-4 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-4 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-4 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-4 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-4 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-4 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-4 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-4 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-4 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-4 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-4 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-4 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-4 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-4 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-4 div.sk-label label.sk-toggleable__label,
+#sk-container-id-4 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-4 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-4 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-4 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-4 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-4 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-4 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-4 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-4 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-4 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-4 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-4 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-4 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-4" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>GridSearchCV(cv=10,
+             estimator=Pipeline(steps=[('preproc',
+                                        ColumnTransformer(transformers=[('num',
+                                                                         Pipeline(steps=[('scaler',
+                                                                                          StandardScaler())]),
+                                                                         ['X1',
+                                                                          'X2',
+                                                                          'X3']),
+                                                                        ('cat',
+                                                                         'passthrough',
+                                                                         ['X4_A',
+                                                                          'X4_B'])])),
+                                       ('Dtree',
+                                        DecisionTreeClassifier(random_state=1))]),
+             param_grid={'Dtree__max_depth': range(2, 10)},
+             return_train_score=True)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-25" type="checkbox"><label for="sk-estimator-id-25" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;GridSearchCV<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.model_selection.GridSearchCV.html">?<span>Documentation for GridSearchCV</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>GridSearchCV(cv=10,
+             estimator=Pipeline(steps=[('preproc',
+                                        ColumnTransformer(transformers=[('num',
+                                                                         Pipeline(steps=[('scaler',
+                                                                                          StandardScaler())]),
+                                                                         ['X1',
+                                                                          'X2',
+                                                                          'X3']),
+                                                                        ('cat',
+                                                                         'passthrough',
+                                                                         ['X4_A',
+                                                                          'X4_B'])])),
+                                       ('Dtree',
+                                        DecisionTreeClassifier(random_state=1))]),
+             param_grid={'Dtree__max_depth': range(2, 10)},
+             return_train_score=True)</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-26" type="checkbox"><label for="sk-estimator-id-26" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">best_estimator_: Pipeline</label><div class="sk-toggleable__content fitted"><pre>Pipeline(steps=[('preproc',
+                 ColumnTransformer(transformers=[('num',
+                                                  Pipeline(steps=[('scaler',
+                                                                   StandardScaler())]),
+                                                  ['X1', 'X2', 'X3']),
+                                                 ('cat', 'passthrough',
+                                                  ['X4_A', 'X4_B'])])),
+                ('Dtree', DecisionTreeClassifier(max_depth=8, random_state=1))])</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-27" type="checkbox"><label for="sk-estimator-id-27" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;preproc: ColumnTransformer<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.compose.ColumnTransformer.html">?<span>Documentation for preproc: ColumnTransformer</span></a></label><div class="sk-toggleable__content fitted"><pre>ColumnTransformer(transformers=[('num',
+                                 Pipeline(steps=[('scaler', StandardScaler())]),
+                                 ['X1', 'X2', 'X3']),
+                                ('cat', 'passthrough', ['X4_A', 'X4_B'])])</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-28" type="checkbox"><label for="sk-estimator-id-28" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">num</label><div class="sk-toggleable__content fitted"><pre>['X1', 'X2', 'X3']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-29" type="checkbox"><label for="sk-estimator-id-29" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;StandardScaler<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.preprocessing.StandardScaler.html">?<span>Documentation for StandardScaler</span></a></label><div class="sk-toggleable__content fitted"><pre>StandardScaler()</pre></div> </div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-30" type="checkbox"><label for="sk-estimator-id-30" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">cat</label><div class="sk-toggleable__content fitted"><pre>['X4_A', 'X4_B']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-31" type="checkbox"><label for="sk-estimator-id-31" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">passthrough</label><div class="sk-toggleable__content fitted"><pre>passthrough</pre></div> </div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-32" type="checkbox"><label for="sk-estimator-id-32" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;DecisionTreeClassifier<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.tree.DecisionTreeClassifier.html">?<span>Documentation for DecisionTreeClassifier</span></a></label><div class="sk-toggleable__content fitted"><pre>DecisionTreeClassifier(max_depth=8, random_state=1)</pre></div> </div></div></div></div></div></div></div></div></div></div></div>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Visualizing the Grid Search with CV
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is one of the first things we should examine after model fitting. Recall: the red dots are the mean validation scores for each value of k and blue vertical bars show the variability of the validation score over the 10 folds.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="146">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>param_values <span class="op">=</span> DecTree_gridCV.cv_results_[<span class="ss">f'param_Dtree__max_depth'</span>]</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>mean_train_scores <span class="op">=</span> DecTree_gridCV.cv_results_[<span class="st">'mean_train_score'</span>]</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>plt.plot(param_values, mean_train_scores, marker<span class="op">=</span><span class="st">'o'</span>, label<span class="op">=</span><span class="st">'Mean Train Score'</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>mean_test_scores <span class="op">=</span> DecTree_gridCV.cv_results_[<span class="st">'mean_test_score'</span>]</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>plt.plot(param_values, mean_test_scores, marker<span class="op">=</span><span class="st">'*'</span>, label<span class="op">=</span><span class="st">'Mean Test Score'</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Tree Depth'</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Score (accuracy)'</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Hyperparameter Tuning Results'</span>)</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>plt.legend()  <span class="co"># Add a legend to the plot</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>plt.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="2_4_Decision_Trees_files/figure-html/cell-19-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>The plot shows that the selected hyperparameter corresponds to a tree with depth equal to:</p>
+<div class="cell" data-execution_count="147">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>DecTree_gridCV.best_params_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="147">
+<pre><code>{'Dtree__max_depth': 8}</code></pre>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+And Visualizing the Decision Tree
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Uncomment and run the following code to see the trained tree model</p>
+</div>
+</div>
+<div class="cell" data-execution_count="148">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># from sklearn.tree import plot_tree</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.figure(figsize=(60, 60))</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot_tree(DecTree_gridCV.best_estimator_['Dtree'], filled=True)</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.show()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+</section>
+<section id="model-performance-evaluation" class="level1">
+<h1>Model Performance Evaluation</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Predictions and Performance Measures
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is similar to what we have already done for previous models so we will proceed quickly through this. We begin by looking at the scores in training and test.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="149">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>DecTree_gridCV.score(XTR, YTR), DecTree_gridCV.score(XTS, YTS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="149">
+<pre><code>(0.9936143039591315, 0.9296482412060302)</code></pre>
+</div>
+</div>
+<p>There is a large difference between the result in training and test, <strong>this model is overfitting!</strong></p>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Datasets for Predictions
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Next we create datasets to store predictions. The next cell makes it easier to adapt this code for other model types.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="150">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> DecTree_gridCV</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>model_name <span class="op">=</span> <span class="st">"Dtree"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="151">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dataset for Training Predictions</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>dfTR_eval <span class="op">=</span> XTR.copy()</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>dfTR_eval[<span class="st">'Y'</span>] <span class="op">=</span> YTR </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="152">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Store the actual predictions</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>newCol <span class="op">=</span> <span class="st">'Y_'</span><span class="op">+</span> model_name <span class="op">+</span><span class="st">'_prob_neg'</span><span class="op">;</span> </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>dfTR_eval[newCol] <span class="op">=</span> model.predict_proba(XTR)[:, <span class="dv">0</span>]</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>newCol <span class="op">=</span> <span class="st">'Y_'</span><span class="op">+</span> model_name <span class="op">+</span><span class="st">'_prob_pos'</span><span class="op">;</span> </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>dfTR_eval[newCol] <span class="op">=</span> model.predict_proba(XTR)[:, <span class="dv">1</span>]</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>newCol <span class="op">=</span> <span class="st">'Y_'</span><span class="op">+</span> model_name <span class="op">+</span><span class="st">'_pred'</span><span class="op">;</span> </span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>dfTR_eval[newCol] <span class="op">=</span> model.predict(XTR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="153">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test predictions dataset</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>dfTS_eval <span class="op">=</span> XTS.copy()</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>dfTS_eval[<span class="st">'Y'</span>] <span class="op">=</span> YTS </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>newCol <span class="op">=</span> <span class="st">'Y_'</span><span class="op">+</span> model_name <span class="op">+</span><span class="st">'_prob_neg'</span><span class="op">;</span> </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>dfTS_eval[newCol] <span class="op">=</span> model.predict_proba(XTS)[:, <span class="dv">0</span>]</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>newCol <span class="op">=</span> <span class="st">'Y_'</span><span class="op">+</span> model_name <span class="op">+</span><span class="st">'_prob_pos'</span><span class="op">;</span> </span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>dfTS_eval[newCol] <span class="op">=</span> model.predict_proba(XTS)[:, <span class="dv">1</span>]</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>newCol <span class="op">=</span> <span class="st">'Y_'</span><span class="op">+</span> model_name <span class="op">+</span><span class="st">'_pred'</span><span class="op">;</span> </span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>dfTS_eval[newCol] <span class="op">=</span> model.predict(XTS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Confusion Matrices
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The comparison of the confusion matrices also indicates overfitting.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="154">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, ConfusionMatrixDisplay</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(constrained_layout<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>spec <span class="op">=</span> fig.add_gridspec(<span class="dv">1</span>, <span class="dv">3</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> fig.add_subplot(spec[<span class="dv">0</span>, <span class="dv">0</span>])<span class="op">;</span>ax1.set_title(<span class="st">'Training'</span>)<span class="op">;</span> ax1.grid(<span class="va">False</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> fig.add_subplot(spec[<span class="dv">0</span>, <span class="dv">2</span>])<span class="op">;</span>ax2.set_title(<span class="st">'Test'</span>)<span class="op">;</span> ax2.grid(<span class="va">False</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay.from_estimator(model, XTR, YTR, cmap<span class="op">=</span><span class="st">"Greens"</span>, colorbar<span class="op">=</span><span class="va">False</span>, ax<span class="op">=</span>ax1, labels<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">0</span>])</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay.from_estimator(model, XTS, YTS, cmap<span class="op">=</span><span class="st">"Greens"</span>, colorbar<span class="op">=</span><span class="va">False</span>, ax<span class="op">=</span>ax2, labels<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">0</span>])</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>plt.suptitle(<span class="st">"Confusion Matrices for "</span><span class="op">+</span> model_name)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>plt.show()<span class="op">;</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="2_4_Decision_Trees_files/figure-html/cell-27-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+ROC Curves
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Again, note the difference.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="155">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> RocCurveDisplay</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>spec <span class="op">=</span> fig.add_gridspec(<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> fig.add_subplot(spec[<span class="dv">0</span>, <span class="dv">0</span>])<span class="op">;</span>ax1.set_title(<span class="st">'Training'</span>)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> fig.add_subplot(spec[<span class="dv">0</span>, <span class="dv">1</span>])<span class="op">;</span>ax2.set_title(<span class="st">'Test'</span>)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>RocCurveDisplay.from_estimator(model, XTR, YTR, plot_chance_level<span class="op">=</span><span class="va">True</span>, ax<span class="op">=</span>ax1)</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>RocCurveDisplay.from_estimator(model, XTS, YTS, plot_chance_level<span class="op">=</span><span class="va">True</span>, ax<span class="op">=</span>ax2)<span class="op">;</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>plt.suptitle(<span class="st">"ROC Curves for "</span><span class="op">+</span> model_name)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>plt.show()<span class="op">;</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="2_4_Decision_Trees_files/figure-html/cell-28-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Calibration Curves
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>And finally let us look at the calibration curves.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="156">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.calibration <span class="im">import</span> CalibrationDisplay</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">2.6</span>))<span class="op">;</span> spec <span class="op">=</span> fig.add_gridspec(<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> fig.add_subplot(spec[<span class="dv">0</span>, <span class="dv">0</span>])<span class="op">;</span>ax1.set_title(<span class="st">'Training'</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> fig.add_subplot(spec[<span class="dv">0</span>, <span class="dv">1</span>])<span class="op">;</span>ax2.set_title(<span class="st">'Test'</span>)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>CalibrationDisplay.from_estimator(model, XTR, YTR, n_bins<span class="op">=</span><span class="dv">10</span>, ax<span class="op">=</span>ax1)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>CalibrationDisplay.from_estimator(model, XTS, YTS, n_bins<span class="op">=</span><span class="dv">10</span>, ax<span class="op">=</span>ax2)<span class="op">;</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>plt.suptitle(<span class="st">"Calibration Curves for "</span><span class="op">+</span> model_name)<span class="op">;</span>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="2_4_Decision_Trees_files/figure-html/cell-29-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 006
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Why are there so few probability values in these plots? Open the pdf file <a href="./2_4_Fitted_Tree_Exploration.pdf">2_4_Fitted_Tree_Exploration.pdf</a> and try to find the answer.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Variable Importance…
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Before fitting this model we mentioned that decision trees provide a measure of variable importance. In our case we can get it from the fitted model as follows.</p>
+<p><strong>Important:</strong> Do not read too much into the importance values <em>per se</em>. They are relative measures, often normalized to sum one.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="157">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>var_importances <span class="op">=</span> pd.DataFrame({<span class="st">'var'</span>:XTR.columns, </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                                <span class="st">'importance'</span>: DecTree_gridCV.best_estimator_[<span class="st">'Dtree'</span>].feature_importances_}</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                                ).sort_values(by<span class="op">=</span><span class="st">"importance"</span>, ascending <span class="op">=</span> <span class="va">False</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>var_importances</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="157">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">var</th>
+<th data-quarto-table-cell-role="th">importance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1</td>
+<td>X2</td>
+<td>0.569743</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">0</td>
+<td>X1</td>
+<td>0.369363</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>X3</td>
+<td>0.055972</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>X4_A</td>
+<td>0.004923</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>X4_B</td>
+<td>0.000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+…and Feature Selection. Creating a Second Decision Tree Model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The result can ve used to select relevant features, discard those whose importance is below a given threshold, and fit a new model.</p>
+<p>In this and the following models we will identify the model and its inputs with standard names so that you can reuse as much of the preceding code as possible.</p>
+</div>
+</div>
+<p>In our case we will discard <code>X_3</code> and <code>X_4</code> and <strong>fit a new model</strong>.</p>
+<div class="cell" data-execution_count="158">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>DTree2_inputs <span class="op">=</span> [<span class="st">'X1'</span>, <span class="st">'X2'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+New Pipeline
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The pipeline preprocessing step now only needs scaling.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="159">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>DTree2_pipe <span class="op">=</span> Pipeline(steps<span class="op">=</span>[(<span class="st">'scaler'</span>, StandardScaler()), </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>                           (<span class="st">'Dtree'</span>, DecisionTreeClassifier(criterion<span class="op">=</span><span class="st">'gini'</span>, </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>                                                            random_state<span class="op">=</span><span class="dv">1</span>))]) </span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Grid Search and Model Fit
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This proceeds just like before, with the new pipeline.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="160">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>DTree2_gridCV <span class="op">=</span> GridSearchCV(estimator<span class="op">=</span>DTree2_pipe, </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>                        param_grid<span class="op">=</span>hyp_grid, </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>                        cv<span class="op">=</span>num_folds,</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>                        return_train_score<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>                        </span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>DTree2_gridCV.fit(dfTR[DTree2_inputs], dfTR[<span class="st">"Y"</span>])<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Python Code to Ease Model Comparison
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In the next section we will compare this model with other models that we have trained in previous sessions. To make our code easy to reuse we create a Python dictionary of models to store the information we need to identify a model (in fact, a dictionary of model dictionaries).</p>
+</div>
+</div>
+<div class="cell" data-execution_count="161">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>modelDict <span class="op">=</span> {<span class="st">"DTree2"</span> : {<span class="st">"model"</span> : DTree2_gridCV, <span class="st">"inputs"</span> : DTree2_inputs}}</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>model_name <span class="op">=</span> <span class="st">"DTree2"</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> modelDict[model_name][<span class="st">"model"</span>]</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>model_inputs <span class="op">=</span> modelDict[model_name][<span class="st">"inputs"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 007
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Uncomment and run the following code cell to do a model performance analysis for this model. <strong>Study the code!</strong> What improvements do you see (if any) in this second model?</p>
+</div>
+</div>
+<div class="cell" data-execution_count="162">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %run -i "./2_4_Performance_Analysis_Binary_Classifier.py"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 008
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What kind of decision boundary do you expect from a decision tree? <strong>After thinking about that,</strong> uncomment and run the following code cell to plot the decision boundary for this model. Remember, <strong>this only works for models with two numerical inputs.</strong></p>
+</div>
+</div>
+<div class="cell" data-execution_count="163">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %run -i "./2_4_DecisionBoundary_2d_BinaryClassifier.py"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 009
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Uncomment and run the following code cell to plot the fitted tree for this model.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="164">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %run -i "./2_4_Plot_Decision_Tree.py"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+</section>
+<section id="model-comparison-and-non-linear-terms-in-logistic-regression-models" class="level1">
+<h1>Model Comparison and Non Linear Terms in Logistic Regression Models</h1>
+<p>We have already trained several different types of models for this dataset. Now we will compare three models, each of a different type. The first one will be a logistic regression model. But recall that EDA has shown that the decision boundary in the <code>X_1</code>, <code>X_2</code>plane is non linear. To account for this, we will refit the model but beforehand we add a new column to the dataset, containing the squares of the values of <code>X1</code>.</p>
+<div class="cell" data-execution_count="165">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>dfTR[<span class="st">"X1Sq"</span>] <span class="op">=</span> dfTR[<span class="st">"X1"</span>]<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>dfTS[<span class="st">"X1Sq"</span>] <span class="op">=</span> dfTS[<span class="st">"X1"</span>]<span class="op">**</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 010
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Can we apply this transformation to the test set? Are we <em>leaking information</em>?</p>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Logistic Regression with Non Linear Terms. Pipeline and Fit
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Now we fit this model. Note again that preprocessing comes down to scaling the (now exclusively) numerical inputs.</p>
+<p>We use the model dictionary to store the results.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="166">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>model_name <span class="op">=</span> <span class="st">"LogReg"</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>LogReg_inputs <span class="op">=</span> [<span class="st">"X1"</span>, <span class="st">"X2"</span>, <span class="st">"X1Sq"</span>]</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>LogReg_pipe <span class="op">=</span> Pipeline(steps<span class="op">=</span>[(<span class="st">'scaler'</span>, StandardScaler()),</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>                        (<span class="st">'LogReg'</span>, LogisticRegression(penalty<span class="op">=</span><span class="va">None</span>))]) </span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>LogReg_pipe.named_steps[<span class="st">'scaler'</span>].set_output(transform<span class="op">=</span><span class="st">'pandas'</span>)</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>LogReg_pipe.fit(dfTR[LogReg_inputs], YTR)<span class="op">;</span></span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>LogReg_coeff <span class="op">=</span> np.hstack((LogReg_pipe.named_steps[<span class="st">"LogReg"</span>].intercept_[np.newaxis, :], </span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>                          LogReg_pipe.named_steps[<span class="st">"LogReg"</span>].coef_))</span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(LogReg_coeff)</span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>modelDict[model_name] <span class="op">=</span>  {<span class="st">"model"</span> : LogReg_pipe, <span class="st">"inputs"</span> : LogReg_inputs}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[  7.57332038 -18.94625368 -13.64390028  21.18728811]]</code></pre>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Coefficients of the Model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For a Logistic Regression model like this we can use the statistical significance tests for the model coefficients:</p>
+</div>
+</div>
+<div class="cell" data-execution_count="182">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>XTR_sm <span class="op">=</span> sm.add_constant(LogReg_pipe.named_steps[<span class="st">'scaler'</span>].transform(dfTR[LogReg_inputs]))</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>XTR_sm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="182">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">const</th>
+<th data-quarto-table-cell-role="th">X1</th>
+<th data-quarto-table-cell-role="th">X2</th>
+<th data-quarto-table-cell-role="th">X1Sq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">330</td>
+<td>1.0</td>
+<td>-1.978462</td>
+<td>0.368036</td>
+<td>-0.483531</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">461</td>
+<td>1.0</td>
+<td>0.729319</td>
+<td>-0.344977</td>
+<td>0.425124</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">945</td>
+<td>1.0</td>
+<td>0.161296</td>
+<td>0.344238</td>
+<td>-0.260478</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">248</td>
+<td>1.0</td>
+<td>0.779554</td>
+<td>-0.052410</td>
+<td>0.498405</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">398</td>
+<td>1.0</td>
+<td>-0.381772</td>
+<td>-0.837718</td>
+<td>-0.670223</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">353</td>
+<td>1.0</td>
+<td>0.610771</td>
+<td>0.282255</td>
+<td>0.260336</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">147</td>
+<td>1.0</td>
+<td>0.149271</td>
+<td>1.133083</td>
+<td>-0.272152</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">540</td>
+<td>1.0</td>
+<td>-0.857866</td>
+<td>1.474887</td>
+<td>-0.831830</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">936</td>
+<td>1.0</td>
+<td>-0.678704</td>
+<td>-0.830746</td>
+<td>-0.792680</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">312</td>
+<td>1.0</td>
+<td>0.776226</td>
+<td>0.385282</td>
+<td>0.493487</td>
+</tr>
+</tbody>
+</table>
+
+<p>783 rows × 4 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="181">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>logis_mod_sm <span class="op">=</span> sm.Logit(YTR, XTR_sm)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>logis_mod_sm_res <span class="op">=</span> logis_mod_sm.fit()</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>logis_mod_sm_res.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Optimization terminated successfully.
+         Current function value: 0.080700
+         Iterations 12</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="181">
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Logit Regression Results</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Dep. Variable:</td>
+<td>Y</td>
+<td data-quarto-table-cell-role="th">No. Observations:</td>
+<td>783</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Model:</td>
+<td>Logit</td>
+<td data-quarto-table-cell-role="th">Df Residuals:</td>
+<td>779</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Method:</td>
+<td>MLE</td>
+<td data-quarto-table-cell-role="th">Df Model:</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Date:</td>
+<td>Mon, 03 Feb 2025</td>
+<td data-quarto-table-cell-role="th">Pseudo R-squ.:</td>
+<td>0.8752</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Time:</td>
+<td>17:10:43</td>
+<td data-quarto-table-cell-role="th">Log-Likelihood:</td>
+<td>-63.188</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">converged:</td>
+<td>True</td>
+<td data-quarto-table-cell-role="th">LL-Null:</td>
+<td>-506.30</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Covariance Type:</td>
+<td>nonrobust</td>
+<td data-quarto-table-cell-role="th">LLR p-value:</td>
+<td>8.634e-192</td>
+</tr>
+</tbody>
+</table>
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">coef</td>
+<td data-quarto-table-cell-role="th">std err</td>
+<td data-quarto-table-cell-role="th">z</td>
+<td data-quarto-table-cell-role="th">P&gt;|z|</td>
+<td data-quarto-table-cell-role="th">[0.025</td>
+<td data-quarto-table-cell-role="th">0.975]</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">const</td>
+<td>7.5643</td>
+<td>1.030</td>
+<td>7.347</td>
+<td>0.000</td>
+<td>5.546</td>
+<td>9.582</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">X1</td>
+<td>-18.9182</td>
+<td>2.571</td>
+<td>-7.358</td>
+<td>0.000</td>
+<td>-23.957</td>
+<td>-13.879</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">X2</td>
+<td>-13.6264</td>
+<td>1.810</td>
+<td>-7.529</td>
+<td>0.000</td>
+<td>-17.174</td>
+<td>-10.079</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">X1Sq</td>
+<td>21.1571</td>
+<td>2.868</td>
+<td>7.377</td>
+<td>0.000</td>
+<td>15.536</td>
+<td>26.778</td>
+</tr>
+</tbody>
+</table>
+<br><br>Possibly complete quasi-separation: A fraction 0.60 of observations can be<br>perfectly predicted. This might indicate that there is complete<br>quasi-separation. In this case some parameters will not be identified.
+</div>
+</div>
+<p>As you can see all the coefficients are significative, including the one for the square of <code>X1</code>.</p>
+<hr>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 011
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Uncomment and run the following two code cells to analyze the model’s performance and to see its decision boundary.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="169">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %run -i "./2_4_Performance_Analysis_Binary_Classifier.py"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="170">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %run -i "./2_4_DecisionBoundary_LogisticRegression.py"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+KNN Model Using The Selected Festures
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For our next model we will use KNN, but with inputs restricted to <code>X1</code> and <code>X2</code>.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="171">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>model_name <span class="op">=</span> <span class="st">"knn"</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>knn_inputs <span class="op">=</span> [<span class="st">"X1"</span>, <span class="st">"X2"</span>]</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>k_values <span class="op">=</span> np.ceil(np.linspace(<span class="dv">3</span>, XTR.shape[<span class="dv">0</span>] <span class="op">/</span> <span class="dv">2</span>, num<span class="op">=</span><span class="dv">15</span>)).astype(<span class="st">"int"</span>).tolist()</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>k_values</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>hyp_grid <span class="op">=</span> {<span class="st">'knn__n_neighbors'</span>: k_values} </span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>knn_pipe <span class="op">=</span> Pipeline(steps<span class="op">=</span>[(<span class="st">'scaler'</span>, StandardScaler()), </span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>                           (<span class="st">'knn'</span>, KNeighborsClassifier())])</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>knn_gridCV <span class="op">=</span> GridSearchCV(estimator<span class="op">=</span>knn_pipe, </span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a>                        param_grid<span class="op">=</span>hyp_grid, </span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>                        cv<span class="op">=</span>num_folds,</span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a>                        return_train_score<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a>knn_gridCV.fit(dfTR[knn_inputs], dfTR[<span class="st">"Y"</span>])</span>
+<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-21"><a href="#cb53-21" aria-hidden="true" tabindex="-1"></a>modelDict[model_name] <span class="op">=</span>  {<span class="st">"model"</span> : knn_gridCV, <span class="st">"inputs"</span> : knn_inputs}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 012
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>As before, uncomment and run the following two code cells to learn about the model’s performance and decision boundary.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="172">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>run <span class="op">-</span>i <span class="st">"./2_4_Performance_Analysis_Binary_Classifier.py"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model knn with model inputs ['X1', 'X2']
+
+        Model score in Training = 0.98
+        Model score in Test = 0.94
+        </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2_4_Decision_Trees_files/figure-html/cell-45-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2_4_Decision_Trees_files/figure-html/cell-45-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2_4_Decision_Trees_files/figure-html/cell-45-output-4.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2_4_Decision_Trees_files/figure-html/cell-45-output-5.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="173">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>run <span class="op">-</span>i <span class="st">"./2_4_DecisionBoundary_2d_BinaryClassifier.py"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="2_4_Decision_Trees_files/figure-html/cell-46-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Comparing the Models Using Test Set Scores
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The first model comparison will be the accuracy of each model using the predictions for the test set.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="174">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ml <span class="kw">in</span> modelDict.keys():</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Test score for %s = %.3f"</span><span class="op">%</span>(ml, modelDict[ml][<span class="st">"model"</span>].score(dfTS[modelDict[ml][<span class="st">"inputs"</span>]], YTS)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Test score for DTree2 = 0.945
+Test score for LogReg = 0.960
+Test score for knn = 0.945</code></pre>
+</div>
+</div>
+<p>The results suggest that the quadratic term has been very successful at increasing the predictive performance of the logistic model.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 013
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Do you think that adding the same column to the decision tree will have a similar impact? What about knn?<br>
+<strong>Extra exercise:</strong> do it and see if the result agree with yor thoughts,</p>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Looking at Validation Scores
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To get a robust assessment of the model comparison we use cross validation scores on the training set. And we plot their distribution using parallel boxplots.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="175">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>metric <span class="op">=</span> <span class="st">'f1'</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>score <span class="op">=</span> {ml:cross_val_score(modelDict[ml][<span class="st">"model"</span>], dfTR[modelDict[ml][<span class="st">"inputs"</span>]], dfTR[<span class="st">"Y"</span>], </span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>                            cv<span class="op">=</span><span class="dv">10</span>, scoring<span class="op">=</span>metric) <span class="cf">for</span> ml <span class="kw">in</span> modelDict.keys()}</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>model_scores <span class="op">=</span> pd.DataFrame(score)</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>sns.boxplot(model_scores.melt(var_name<span class="op">=</span><span class="st">"model"</span>, value_name<span class="op">=</span>metric), x<span class="op">=</span>metric, y <span class="op">=</span><span class="st">"model"</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="2_4_Decision_Trees_files/figure-html/cell-48-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+ROC Curves for Comparison
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The ROC curves again show the same ordering of the models, from the probabilistic perspective.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="176">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> RocCurveDisplay</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ml <span class="kw">in</span> modelDict.keys():</span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a>    RocCurveDisplay.from_estimator(modelDict[ml][<span class="st">"model"</span>], </span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>                                   dfTS[modelDict[ml][<span class="st">"inputs"</span>]], dfTS[<span class="st">"Y"</span>], </span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a>                                   ax<span class="op">=</span>ax,  name<span class="op">=</span>ml[<span class="dv">0</span>], pos_label<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"ROC curves of the models for the Test set"</span>)</span>
+<span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>&lt;Figure size 600x400 with 0 Axes&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2_4_Decision_Trees_files/figure-html/cell-49-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Calibration Curves for Comparison
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In this case the curves show that none of the models is really well calibrated.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="177">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>plt.rcdefaults()<span class="op">;</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.calibration <span class="im">import</span> CalibrationDisplay</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>plt.figure(constrained_layout<span class="op">=</span><span class="va">False</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">12</span>))</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ml <span class="kw">in</span> modelDict.keys():</span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>    CalibrationDisplay.from_estimator(modelDict[ml][<span class="st">"model"</span>],</span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>                                      dfTS[modelDict[ml][<span class="st">"inputs"</span>]], dfTS[<span class="st">"Y"</span>],</span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>                                      n_bins<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>                                      ax<span class="op">=</span>ax,  name<span class="op">=</span>ml, pos_label<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Calibration curves of the models for the Test set"</span>)</span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>&lt;Figure size 1200x1200 with 0 Axes&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2_4_Decision_Trees_files/figure-html/cell-50-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 014
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Why do you think this calibration curves are this far from ideal?</p>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In the Next Session
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We will discuss some extensions of the decision tree model, namely the Random Forest and XGBoost modeling methods.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
