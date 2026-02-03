@@ -10,7 +10,7 @@ mkdir -p "$DEST_DIR"
 
 # Recursively find files ending with 'local'
 # Use -print0 to safely handle filenames with spaces
-find "$SOURCE_DIR" -type f -regex ".*local\.[^./]+$" -print0 | while IFS= read -r -d '' file; do
+find "$SOURCE_DIR" -type f -regex ".*local\..*" -print0 | while IFS= read -r -d '' file; do
     filename=$(basename "$file")
     
     if [[ -f "$DEST_DIR/$filename" ]]; then
