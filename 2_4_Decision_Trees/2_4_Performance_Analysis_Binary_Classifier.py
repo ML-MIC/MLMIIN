@@ -1,8 +1,12 @@
 # Performance Analysis of a Binary Classification Model
 
-if ~('dfTR' in globals()):
+
+
+if not('dfTR' in globals()):
     dfTR = dfTR_eval.copy()
-if ~('dfTR' in globals()):
+else:
+    print("dfTR already exists")
+if not('dfTR' in globals()):
     dfTS = dfTS_eval.copy()
 
 ## Training predictions dataset
