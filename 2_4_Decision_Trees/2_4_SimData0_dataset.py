@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 from matplotlib.cbook import boxplot_stats
 
 # Load the data
-df = pd.read_csv('Simdata0.csv', sep=";")
+df = pd.read_csv('SimData0.csv', sep=";")
 
 # Remove Unused Columns from the Dataset
 df.drop(columns="id", inplace=True) 
