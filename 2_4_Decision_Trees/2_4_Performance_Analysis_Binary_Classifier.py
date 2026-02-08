@@ -1,13 +1,30 @@
 # Performance Analysis of a Binary Classification Model
 
-
+check_datasets = ['dfTR' in globals(), 'dfTR_eval' in globals(), 'dfTS' in globals(), 'dfTS_eval' in globals()]
+print('Checking existence of dfTR, dfTR_eval and dfTS, dfTS_eval:', check_datasets)
 
 if not('dfTR' in globals()):
-    dfTR = dfTR_eval.copy()
-else:
-    print("dfTR already exists")
-if not('dfTR' in globals()):
-    dfTS = dfTS_eval.copy()
+    # Dataset for Training Predictions
+    dfTR = XTR.copy()
+    dfTR['Y'] = YTR
+    print("Created dfTR")
+
+if not('dfTS' in globals()):
+    # Dataset for Training Predictions
+    dfTS = XTS.copy()
+    dfTS['Y'] = YTS
+    print("Created dfTS")
+
+if not('dfTR_eval' in globals()):
+    # Dataset for Training Predictions
+    dfTR_eval = dfTR.copy()
+    print("Created dfTR_eval")
+
+if not('dfTS_eval' in globals()):
+    # Dataset for Training Predictions
+    dfTS_eval = dfTS.copy()
+    print("Created dfTS_eval")
+
 
 ## Training predictions dataset
 
