@@ -96,3 +96,4 @@ rsconnect/
 *local.*
 *local.ipynb
 
+*__pycache__/
