@@ -4,6 +4,9 @@ exclude
 data/
 data
 
+**/*_local/
+
+
 **/tensorboard_logs/
 
 **/*.DS_Store
